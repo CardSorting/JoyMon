@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JoyMon.Game")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3b414577a4fb86a053ba19315e74a225f968070e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+512c2d800703f0ab15086e7e55d918d37b4ab181")]
 [assembly: System.Reflection.AssemblyProductAttribute("JoyMon.Game")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JoyMon.Game")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
