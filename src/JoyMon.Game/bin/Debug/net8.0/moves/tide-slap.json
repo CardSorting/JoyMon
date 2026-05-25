@@ -1,0 +1,8 @@
+{
+  "id": "tide-slap",
+  "name": "Tide Slap",
+  "type": "Tide",
+  "power": 40,
+  "accuracy": 95,
+  "maxUses": 15
+}

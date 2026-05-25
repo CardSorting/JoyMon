@@ -17,4 +17,8 @@ public enum GameState
     StarterChoice,
     /// <summary>Party screen displaying current party member statistics.</summary>
     PartyScreen,
+    /// <summary>Inventory screen listing carried items.</summary>
+    InventoryScreen,
+    /// <summary>Victory screen shown after defeating the trial boss.</summary>
+    EndingScreen,
 }

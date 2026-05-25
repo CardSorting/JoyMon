@@ -59,6 +59,9 @@ public sealed class InputService : IInputService
     public bool StartPressed =>
         Pressed(Keys.Enter) || Pressed(Keys.Space) || ButtonPressed(Buttons.Start);
 
+    public bool InventoryPressed =>
+        Pressed(Keys.I);
+
     // ── Helpers ──
 
     private bool Pressed(Keys key) =>

@@ -1,25 +1,37 @@
-# JSDP TASK 005 — Tilemap Format + Starter Town Rendering
+# JSDP TASK 016 — Complete
 
-## Architecture Mapping
+## Summary
 
-| Layer | Files | Purpose |
-|-------|-------|---------|
-| **Domain** (JoyMon.Core) | (none) | No new Core types — maps are infrastructure + rendering |
-| **Content** (JoyMon.Content) | `MapContent.cs`, `MapLoader.cs` | JSON model + load/validate |
-| **Game** (JoyMon.Game) | `TileAtlas.cs`, `MapRenderer.cs`, `Camera.cs` | Programmatic tileset, map drawing, viewport |
-| **Data** (content/) | `maps/starter-town.json` | Seed map |
+### Files Created
+- **`content/creatures/glimmoo.json`** — New creature (Moss-type, HP 46, balanced stats)
+- **`content/encounters/trial-grove.json`** — Encounter table: Rootsnail (40%), Queuebee (35%), Glimmoo (25%), levels 3-5, 12% encounter rate on grass tiles
+- **`content/maps/trial-grove.json`** — Maze map (22×14) with winding corridors from entrance (10,12) → healer alcove at (4,8) → boss gate at (10,1)
+- **`content/dialogue/trial-grove.json`** — Elder Willow NPC at (4,8) with healing dialogue
+- **`tests/JoyMon.Tests/TrialGroveTests.cs`** — 13 tests covering map validation, transitions, healing, boss gate, encounters, and dialogue
 
-## Sovereign Triad Audit
+### Files Modified
+- **`src/JoyMon.Game/Game1.cs`** — Dialogue loader now iterates all `*.json` files in the dialogue directory instead of hardcoding `starter-town.json` only
 
-### THE ARCHITECT
-- Collision layer is parsed but not used by rendering — clean separation (readiness for future player movement).
-- Map rendering logic lives entirely in Game, map validation lives in Content. No crossing.
+### Already In Place (no changes needed)
+- `content/maps/route-1.json` already had the north transition to Trial Grove at (10, 0)
+- `src/JoyMon.Game/Game1.cs` already had `trial-grove-healer` NPC integration with `HealParty()` call
+- `content/bosses/lanternox-trial.json` already defines boss gate at (10, 1) on trial-grove
 
-### THE CRITIC
-- Assumption: programmatic tileset texture generation works without external files. If TileAtlas fails to create the texture (e.g. GPU driver issues), rendering is blank. **Hardening**: TileAtlas uses `Texture2D.SetData` which always produces valid pixels; no asset path dependency.
-- Assumption: MapLoader path is correct at runtime. **Hardening**: csproj copies JSON to output.
+### Verification
+- **dotnet build** — Succeeds with 0 errors
+- **dotnet test** — All 117 tests pass (104 pre-existing + 13 new Trial Grove tests)
 
-### THE SRE
-- If map JSON is malformed, MapLoader throws `InvalidContentException` (same pattern as ContentLoader). Game1 catches at load time; fallback to an empty placeholder would be ideal but is out of scope.
-
-*Double down on this concept, audit and revise in its entirety.*
+### Test Coverage
+1. TrialGroveMap_ValidatesSuccessfully — Map JSON loads and validates
+2. Route1_HasNorthTransitionToTrialGrove — Route 1 → Trial Grove transition exists
+3. TrialGrove_HasSouthTransitionToRoute1 — Trial Grove → Route 1 return transition exists
+4. Player_CanTransitionFromRoute1_ToTrialGrove — Walkability + transition trigger works
+5. HealParty_RestoresAllJoyMonHP — Healing restores full HP
+6. HealParty_RestoresMoveUses — Healing restores full PP/uses
+7. BossGate_OnTrialGrove_TriggersIntroDialogue — Boss gate triggers intro dialogue
+8. BossGate_DoesNotTrigger_WrongMap — Boss gate doesn't trigger off-map
+9. BossGate_DoesNotTrigger_AfterCleared — Boss gate doesn't trigger when cleared
+10. TrialGroveEncounterTable_LoadsSuccessfully — Encounter table loads with correct entries
+11. TrialGroveEncounter_InvalidCreature_FailsValidation — Invalid creature reference rejected
+12. PlayerCanWalk_FromEntrance_ToBossGatePosition — Key tiles (spawn, gate, exit) are walkable
+13. TrialGroveDialogue_LoadsSuccessfully — Dialogue file with NPC definition validates

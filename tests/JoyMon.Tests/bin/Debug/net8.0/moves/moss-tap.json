@@ -1,0 +1,8 @@
+{
+  "id": "moss-tap",
+  "name": "Moss Tap",
+  "type": "Moss",
+  "power": 40,
+  "accuracy": 95,
+  "maxUses": 15
+}

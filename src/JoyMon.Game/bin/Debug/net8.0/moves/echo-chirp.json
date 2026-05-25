@@ -1,0 +1,8 @@
+{
+  "id": "echo-chirp",
+  "name": "Echo Chirp",
+  "type": "Echo",
+  "power": 35,
+  "accuracy": 100,
+  "maxUses": 20
+}

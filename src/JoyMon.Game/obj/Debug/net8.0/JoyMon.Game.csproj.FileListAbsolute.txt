@@ -42,3 +42,14 @@
 /Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/creatures/queuebee.json
 /Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/creatures/rootsnail.json
 /Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/encounters/route-1.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/obj/Debug/net8.0/JoyMon.Game.sourcelink.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/trainers/route-1-rival.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/maps/trial-grove.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/creatures/lanternox.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/moves/echo-chirp.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/moves/guard-curl.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/moves/tide-slap.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/bosses/lanternox-trial.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/dialogue/trial-grove.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/creatures/glimmoo.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/Debug/net8.0/encounters/trial-grove.json

@@ -3,6 +3,6 @@
   "name": "Spark Peck",
   "type": "Spark",
   "power": 45,
-  "accuracy": 90,
+  "accuracy": 95,
   "maxUses": 12
 }

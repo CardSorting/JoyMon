@@ -68,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet8/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -126,7 +126,82 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet8/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/JoyMon.Game.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/JoyMon.Game.csproj",
+        "projectName": "JoyMon.Game",
+        "projectPath": "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/JoyMon.Game.csproj",
+        "packagesPath": "/Users/bozoegg/.nuget/packages/",
+        "outputPath": "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/bozoegg/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/JoyMon.Content.csproj": {
+                "projectPath": "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/JoyMon.Content.csproj"
+              },
+              "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Core/JoyMon.Core.csproj": {
+                "projectPath": "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Core/JoyMon.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "MonoGame.Content.Builder.Task": {
+              "target": "Package",
+              "version": "[3.8.2.1105, )"
+            },
+            "MonoGame.Framework.DesktopGL": {
+              "target": "Package",
+              "version": "[3.8.2.1105, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet8/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -157,6 +232,9 @@
               },
               "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Core/JoyMon.Core.csproj": {
                 "projectPath": "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Core/JoyMon.Core.csproj"
+              },
+              "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/JoyMon.Game.csproj": {
+                "projectPath": "/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/JoyMon.Game.csproj"
               }
             }
           }
@@ -213,7 +291,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet8/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

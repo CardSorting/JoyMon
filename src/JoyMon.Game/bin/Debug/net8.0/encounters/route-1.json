@@ -3,18 +3,18 @@
   "mapId": "route-1",
   "zoneId": "grass",
   "tileIds": [1],
-  "encounterRate": 0.1,
+  "encounterRate": 0.12,
   "entries": [
     {
       "creatureId": "queuebee",
       "minLevel": 2,
-      "maxLevel": 3,
+      "maxLevel": 2,
       "weight": 50
     },
     {
       "creatureId": "rootsnail",
       "minLevel": 2,
-      "maxLevel": 4,
+      "maxLevel": 3,
       "weight": 35
     },
     {

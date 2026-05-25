@@ -1,0 +1,13 @@
+{
+  "id": "queuebee",
+  "name": "Queuebee",
+  "type": "Spark",
+  "baseStats": {
+    "maxHp": 40,
+    "attack": 7,
+    "defense": 5,
+    "speed": 10
+  },
+  "starterEligible": false,
+  "learnset": ["spark-peck", "tackle"]
+}

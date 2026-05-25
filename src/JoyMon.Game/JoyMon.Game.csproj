@@ -25,6 +25,8 @@
     <Content Include="..\..\content\creatures\**\*.json" Link="creatures\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\content\moves\**\*.json" Link="moves\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\content\encounters\**\*.json" Link="encounters\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\content\trainers\**\*.json" Link="trainers\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\content\bosses\**\*.json" Link="bosses\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

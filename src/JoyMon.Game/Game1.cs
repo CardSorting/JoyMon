@@ -34,7 +34,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     // Loaded content
     private MapContent? _currentMap;
 
-    private void TransitionToMap(string mapId, int spawnX, int spawnY)
+    private void TransitionToMap(string mapId, int spawnX, int spawnY, bool autosave = true)
     {
         try
         {
@@ -45,6 +45,8 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             _mapRenderer.SetMap(nextMap);
             _player.Initialize(spawnX, spawnY);
             UpdateSafeRecoveryPoint(nextMap.Id, spawnX, spawnY);
+            if (autosave)
+                AutosaveCurrentGame();
             
             // Recenter camera immediately
             _camera.Reset();
@@ -77,8 +79,13 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     private readonly Player _player = new();
     private Texture2D _playerTexture = null!;
     private readonly PlayerProfile _profile = new();
+    private readonly HashSet<string> _defeatedTrainers = new();
     private bool _talkingToDrCedar;
     private ContentDatabase _contentDb = null!;
+    private SaveService? _saveService;
+    private int _titleSelectionIndex = 1;
+    private string? _saveStatusMessage;
+    private double _saveStatusTimer;
 
     // Dialogue and NPCs
     private readonly DialogueState _dialogue = new();
@@ -97,6 +104,18 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     private readonly Dictionary<string, EncounterTableContent> _encounterTables = new();
     private JoyMonInstance? _wildEncounter;
     private BattleScene? _battleScene;
+
+    // Trainers
+    private readonly Dictionary<string, TrainerContent> _trainers = new();
+    private string? _pendingTrainerBattleId;
+    private string? _activeTrainerId;
+
+    // Boss
+    private BossContent? _boss;
+    private bool _pendingBossBattle;
+    private bool _activeBossBattle;
+    private EndingScreenData? _endingData;
+    private string? _lastWildSpeciesId;
 
     // Recovery point used after wild battle losses.
     private string _safeMapId = "starter-town";
@@ -183,32 +202,39 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         try
         {
             var dialogueDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dialogue");
-            var loader = new DialogueLoader(dialogueDir);
-            var dialogueFile = loader.Load("starter-town.json");
-
-            foreach (var npcContent in dialogueFile.Npcs)
+            if (Directory.Exists(dialogueDir))
             {
-                var facing = ParseDirection(npcContent.FacingDirection);
-                var npc = new Npc(
-                    npcContent.Id,
-                    npcContent.Name,
-                    npcContent.TilePosition.X,
-                    npcContent.TilePosition.Y,
-                    facing,
-                    npcContent.DialogueId,
-                    npcContent.SpriteId
-                );
-                _npcs.Add(npc);
-
-                if (!_npcTextures.ContainsKey(npc.SpriteId))
+                var loader = new DialogueLoader(dialogueDir);
+                foreach (var file in Directory.EnumerateFiles(dialogueDir, "*.json"))
                 {
-                    _npcTextures[npc.SpriteId] = CreateNpcTexture(GraphicsDevice, npc.SpriteId);
-                }
-            }
+                    var dialogueFile = loader.Load(Path.GetFileName(file));
 
-            foreach (var dlgContent in dialogueFile.Dialogues)
-            {
-                _dialogues[dlgContent.Id] = dlgContent;
+                    foreach (var npcContent in dialogueFile.Npcs)
+                    {
+                        var facing = ParseDirection(npcContent.FacingDirection);
+                        var npc = new Npc(
+                            npcContent.Id,
+                            npcContent.Name,
+                            npcContent.TilePosition.X,
+                            npcContent.TilePosition.Y,
+                            facing,
+                            npcContent.DialogueId,
+                            npcContent.SpriteId,
+                            npcContent.MapId
+                        );
+                        _npcs.Add(npc);
+
+                        if (!_npcTextures.ContainsKey(npc.SpriteId))
+                        {
+                            _npcTextures[npc.SpriteId] = CreateNpcTexture(GraphicsDevice, npc.SpriteId);
+                        }
+                    }
+
+                    foreach (var dlgContent in dialogueFile.Dialogues)
+                    {
+                        _dialogues[dlgContent.Id] = dlgContent;
+                    }
+                }
             }
         }
         catch (Exception ex)
@@ -221,6 +247,8 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         {
             var loader = new ContentLoader(AppDomain.CurrentDomain.BaseDirectory);
             _contentDb = loader.Load();
+            _saveService = new SaveService(_contentDb);
+            _titleSelectionIndex = _saveService.SaveExists ? 0 : 1;
         }
         catch (Exception ex)
         {
@@ -250,6 +278,63 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Encounters load failed: {ex.Message}");
+        }
+
+        // Load trainers from JSON
+        try
+        {
+            var trainersDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "trainers");
+            if (Directory.Exists(trainersDir) && _contentDb is not null)
+            {
+                var loader = new TrainerLoader(trainersDir);
+                var validCreatureIds = _contentDb.Species.Keys.ToHashSet();
+                var validMoveIds = _contentDb.Moves.Keys.ToHashSet();
+
+                foreach (var file in Directory.EnumerateFiles(trainersDir, "*.json"))
+                {
+                    var trainer = loader.Load(Path.GetFileName(file), validCreatureIds, validMoveIds);
+                    _trainers[trainer.Id] = trainer;
+
+                    var facing = ParseDirection(trainer.FacingDirection);
+                    var trainerNpc = new Npc(
+                        trainer.Id,
+                        trainer.DisplayName,
+                        trainer.TilePosition.X,
+                        trainer.TilePosition.Y,
+                        facing,
+                        dialogueId: trainer.Id,
+                        trainer.SpriteId,
+                        trainer.MapId);
+                    _npcs.Add(trainerNpc);
+
+                    if (!_npcTextures.ContainsKey(trainer.SpriteId))
+                    {
+                        _npcTextures[trainer.SpriteId] = CreateNpcTexture(GraphicsDevice, trainer.SpriteId);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Trainers load failed: {ex.Message}");
+        }
+
+        // Load boss from JSON
+        try
+        {
+            var bossesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bosses");
+            if (Directory.Exists(bossesDir) && _contentDb is not null)
+            {
+                var loader = new BossLoader(bossesDir);
+                var validCreatureIds = _contentDb.Species.Keys.ToHashSet();
+                var bossFile = Path.Combine(bossesDir, "lanternox-trial.json");
+                if (File.Exists(bossFile))
+                    _boss = loader.Load("lanternox-trial.json", validCreatureIds);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Boss load failed: {ex.Message}");
         }
     }
 
@@ -356,6 +441,26 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     {
         var tex = new Texture2D(device, 16, 16);
         var pixels = new Color[16 * 16];
+
+        if (spriteId == "sign")
+        {
+            for (int y = 0; y < 16; y++)
+            {
+                for (int x = 0; x < 16; x++)
+                {
+                    pixels[y * 16 + x] = Color.Transparent;
+                    if (x >= 3 && x <= 12 && y >= 3 && y <= 9)
+                        pixels[y * 16 + x] = Color.SaddleBrown;
+                    if (x >= 4 && x <= 11 && y >= 4 && y <= 8)
+                        pixels[y * 16 + x] = Color.Goldenrod;
+                    if (x >= 7 && x <= 8 && y >= 10 && y <= 14)
+                        pixels[y * 16 + x] = Color.SaddleBrown;
+                }
+            }
+
+            tex.SetData(pixels);
+            return tex;
+        }
         
         Color clothingColor = spriteId switch
         {
@@ -363,6 +468,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             "guard" => Color.DarkSlateBlue,  // Guard uniform
             "kid" => Color.ForestGreen,      // Green shirt
             "operator" => Color.DarkRed,     // Red/Orange shirt
+            "rival" => Color.Crimson,
             _ => Color.Purple
         };
 
@@ -452,6 +558,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     {
         _input.Update();
         _debug.Update(gameTime);
+        TrackPlayTime(gameTime);
 
         if (_input.DebugTogglePressed)
             _debug.Toggle();
@@ -476,6 +583,19 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             case GameState.PartyScreen:
                 UpdatePartyScreen(gameTime);
                 break;
+            case GameState.InventoryScreen:
+                UpdateInventoryScreen(gameTime);
+                break;
+            case GameState.EndingScreen:
+                UpdateEndingScreen(gameTime);
+                break;
+        }
+
+        if (_saveStatusTimer > 0)
+        {
+            _saveStatusTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+            if (_saveStatusTimer <= 0)
+                _saveStatusMessage = null;
         }
 
         base.Update(gameTime);
@@ -496,8 +616,102 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     private void UpdateTitle(GameTime gameTime)
     {
         _title.Update(gameTime);
+
+        var continueEnabled = _saveService?.SaveExists == true;
+        if (!continueEnabled)
+            _titleSelectionIndex = 1;
+
+        if (continueEnabled)
+        {
+            if (_input.UpPressed || _input.DownPressed)
+                _titleSelectionIndex = _titleSelectionIndex == 0 ? 1 : 0;
+        }
+
         if (_input.StartPressed)
+        {
+            if (_titleSelectionIndex == 0 && continueEnabled)
+                LoadSavedGame();
+            else
+                StartNewGame();
+        }
+    }
+
+    private void StartNewGame()
+    {
+        _profile.Name = "Player";
+        _profile.Party.Clear();
+        _profile.ResetDefaultItems();
+        _profile.Flags.Clear();
+        _profile.Captures.Clear();
+        _profile.PlayTimeSeconds = 0;
+        _defeatedTrainers.Clear();
+        _endingData = null;
+        _pendingBossBattle = false;
+        _talkingToDrCedar = false;
+        _dialogue.Close();
+
+        TransitionToMap("starter-town", 5, 10, autosave: false);
+        State = GameState.Overworld;
+    }
+
+    private void LoadSavedGame()
+    {
+        if (_saveService is null)
+            return;
+
+        try
+        {
+            var save = _saveService.LoadSave();
+            TransitionToMap(save.CurrentMap, save.PlayerTilePosition.X, save.PlayerTilePosition.Y, autosave: false);
+            _saveService.Restore(save, _profile, _player);
+            _defeatedTrainers.Clear();
+            foreach (var trainerId in save.DefeatedTrainers)
+                _defeatedTrainers.Add(trainerId);
+
+            _talkingToDrCedar = false;
+            _dialogue.Close();
             State = GameState.Overworld;
+        }
+        catch (Exception ex)
+        {
+            _saveStatusMessage = ex.Message;
+            _saveStatusTimer = 3.0;
+            System.Diagnostics.Debug.WriteLine($"Failed to load save: {ex.Message}");
+        }
+    }
+
+    private void SaveCurrentGame()
+    {
+        if (_saveService is null || _currentMap is null)
+            return;
+
+        try
+        {
+            _saveService.Save(_profile, _player, _currentMap.Id, _defeatedTrainers);
+            _saveStatusMessage = "Saved.";
+            _saveStatusTimer = 2.0;
+        }
+        catch (Exception ex)
+        {
+            _saveStatusMessage = "Save failed.";
+            _saveStatusTimer = 3.0;
+            System.Diagnostics.Debug.WriteLine($"Failed to save game: {ex.Message}");
+        }
+    }
+
+    private void AutosaveCurrentGame()
+    {
+        if (_saveService is null || _currentMap is null)
+            return;
+
+        try
+        {
+            _saveService.Save(_profile, _player, _currentMap.Id, _defeatedTrainers);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Autosave failed: {ex.Message}");
+        }
     }
 
     private void UpdateOverworld(GameTime gameTime)
@@ -519,6 +733,18 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                             State = GameState.StarterChoice;
                         }
                     }
+
+                    if (_pendingTrainerBattleId is not null)
+                    {
+                        var trainerId = _pendingTrainerBattleId;
+                        _pendingTrainerBattleId = null;
+                        StartTrainerBattle(trainerId);
+                    }
+                    else if (_pendingBossBattle)
+                    {
+                        _pendingBossBattle = false;
+                        StartBossBattle();
+                    }
                 }
             }
             return; // Lock input/movement during dialogue
@@ -527,6 +753,12 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         if (_input.CancelPressed)
         {
             State = GameState.PartyScreen;
+            return;
+        }
+
+        if (_input.InventoryPressed)
+        {
+            State = GameState.InventoryScreen;
             return;
         }
 
@@ -545,14 +777,26 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             int tx = _player.X + dx;
             int ty = _player.Y + dy;
 
-            var npc = _npcs.FirstOrDefault(n => n.X == tx && n.Y == ty);
+            var mapId = _currentMap?.Id ?? string.Empty;
+            var npc = _npcs.FirstOrDefault(n => n.MapId == mapId && n.X == tx && n.Y == ty);
             if (npc is not null)
             {
                 npc.Facing = GetOppositeDirection(_player.Facing);
 
+                if (_trainers.TryGetValue(npc.Id, out var trainer))
+                {
+                    InteractWithTrainer(trainer);
+                    return;
+                }
+
                 if (npc.Id == "dr-cedar")
                 {
                     _talkingToDrCedar = true;
+                }
+                else if (npc.Id == "trial-grove-healer")
+                {
+                    HealParty();
+                    AutosaveCurrentGame();
                 }
 
                 string dialogueId = npc.DialogueId;
@@ -646,6 +890,9 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         // Check for grass encounter if player successfully completed a step onto a new tile
         if (!transitionOccurred && (_player.X != lastX || _player.Y != lastY))
         {
+            if (TryTriggerBossGate())
+                return;
+
             if (_profile.HasFlag("received_starter") && _currentMap is not null)
             {
                 if (_encounterTables.TryGetValue(_currentMap.Id, out var table))
@@ -661,6 +908,26 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 }
             }
         }
+    }
+
+    private bool TryTriggerBossGate()
+    {
+        if (_boss is null || _currentMap is null || _dialogue.IsActive)
+            return false;
+
+        var trigger = BossInteraction.TryTriggerGate(
+            _boss,
+            _profile,
+            _currentMap.Id,
+            _player.X,
+            _player.Y);
+
+        if (trigger != BossGateTriggerResult.StartIntroDialogue)
+            return false;
+
+        _dialogue.Start(_boss.IntroDialogue.Speaker, _boss.IntroDialogue.Lines);
+        _pendingBossBattle = true;
+        return true;
     }
 
     private void TriggerEncounter(EncounterTableContent table)
@@ -694,12 +961,12 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
 
             if (_contentDb != null && _contentDb.Species.TryGetValue(selectedEntry.CreatureId, out var species))
             {
-                StartWildBattle(species.CreateInstance(level));
+                StartWildBattle(species.CreateInstance(level), selectedEntry.CreatureId);
             }
         }
     }
 
-    private void StartWildBattle(JoyMonInstance wildJoyMon)
+    private void StartWildBattle(JoyMonInstance wildJoyMon, string? speciesId = null)
     {
         var activeJoyMon = _profile.Party.FirstOrDefault(joymon => !joymon.IsFainted)
             ?? _profile.Party.FirstOrDefault();
@@ -707,10 +974,107 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         if (activeJoyMon is null)
             return;
 
+        _activeTrainerId = null;
+        _activeBossBattle = false;
+        _lastWildSpeciesId = speciesId;
         _wildEncounter = wildJoyMon;
-        _battleScene = new BattleScene(activeJoyMon, wildJoyMon, new BattleRngAdapter(_rng));
+        _battleScene = new BattleScene(activeJoyMon, wildJoyMon, new BattleRngAdapter(_rng), _profile);
 
         // Stop movement state immediately on transition to avoid chaining issues later.
+        _player.State = MovementState.Idle;
+        _player.TargetX = _player.X;
+        _player.TargetY = _player.Y;
+        _player.MoveProgress = 1.0f;
+
+        State = GameState.Battle;
+    }
+
+    private void InteractWithTrainer(TrainerContent trainer)
+    {
+        var interaction = TrainerInteraction.Resolve(trainer, _defeatedTrainers);
+        _dialogue.Start(interaction.Dialogue.Speaker, interaction.Dialogue.Lines);
+
+        if (interaction.Kind == TrainerInteractionKind.ShowDialogueThenBattle
+            && TrainerInteraction.CanStartBattle(trainer, _defeatedTrainers))
+        {
+            _pendingTrainerBattleId = trainer.Id;
+        }
+    }
+
+    private void StartTrainerBattle(string trainerId)
+    {
+        if (!_trainers.TryGetValue(trainerId, out var trainer))
+            return;
+
+        if (!TrainerInteraction.CanStartBattle(trainer, _defeatedTrainers))
+            return;
+
+        var activeJoyMon = _profile.Party.FirstOrDefault(joymon => !joymon.IsFainted)
+            ?? _profile.Party.FirstOrDefault();
+
+        if (activeJoyMon is null || trainer.Party.Count == 0)
+            return;
+
+        var opponent = CreateTrainerJoyMon(trainer.Party[0]);
+        if (opponent is null)
+            return;
+
+        _activeTrainerId = trainerId;
+        _activeBossBattle = false;
+        _wildEncounter = null;
+        _battleScene = new BattleScene(
+            activeJoyMon,
+            opponent,
+            new BattleRngAdapter(_rng),
+            _profile,
+            isTrainerBattle: true,
+            opponentTrainerName: trainer.DisplayName);
+
+        _player.State = MovementState.Idle;
+        _player.TargetX = _player.X;
+        _player.TargetY = _player.Y;
+        _player.MoveProgress = 1.0f;
+
+        State = GameState.Battle;
+    }
+
+    private JoyMonInstance? CreateTrainerJoyMon(TrainerPartyMemberContent member)
+    {
+        if (_contentDb is null)
+            return null;
+
+        if (!_contentDb.Species.TryGetValue(member.CreatureId, out var species))
+            return null;
+
+        return species.CreateInstance(member.Level);
+    }
+
+    private void StartBossBattle()
+    {
+        if (_boss is null || BossInteraction.IsCleared(_profile, _boss))
+            return;
+
+        var activeJoyMon = _profile.Party.FirstOrDefault(joymon => !joymon.IsFainted)
+            ?? _profile.Party.FirstOrDefault();
+
+        if (activeJoyMon is null || _contentDb is null)
+            return;
+
+        if (!_contentDb.Species.TryGetValue(_boss.CreatureId, out var species))
+            return;
+
+        var opponent = species.CreateInstance(_boss.Level);
+        _activeTrainerId = null;
+        _activeBossBattle = true;
+        _wildEncounter = null;
+        _battleScene = new BattleScene(
+            activeJoyMon,
+            opponent,
+            new BattleRngAdapter(_rng),
+            _profile,
+            isBossBattle: true,
+            bossDisplayName: _boss.DisplayName);
+
         _player.State = MovementState.Idle;
         _player.TargetX = _player.X;
         _player.TargetY = _player.Y;
@@ -747,17 +1111,73 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
 
     private void CompleteBattle(BattleSceneOutcome outcome)
     {
+        var trainerId = _activeTrainerId;
+        var wasTrainerBattle = trainerId is not null;
+        var wasBossBattle = _activeBossBattle;
+        _activeTrainerId = null;
+        _activeBossBattle = false;
         _battleScene = null;
         _wildEncounter = null;
 
-        if (outcome == BattleSceneOutcome.Lost)
+        if (trainerId is not null)
+            TrainerInteraction.RecordDefeat(_defeatedTrainers, trainerId, outcome);
+
+        if (outcome == BattleSceneOutcome.Captured && !string.IsNullOrWhiteSpace(_lastWildSpeciesId))
+            _profile.RecordCapture(_lastWildSpeciesId);
+        _lastWildSpeciesId = null;
+
+        if (wasBossBattle && _boss is not null && outcome == BattleSceneOutcome.Won)
+        {
+            BossInteraction.RecordVictory(_profile, _boss);
+            ShowEndingScreen();
+            AutosaveCurrentGame();
+            return;
+        }
+
+        if (outcome == BattleSceneOutcome.Won && trainerId is not null && _trainers.TryGetValue(trainerId, out var trainer))
+        {
+            _dialogue.Start(trainer.DialogueAfter.Speaker, trainer.DialogueAfter.Lines);
+            AutosaveCurrentGame();
+        }
+        else if (outcome == BattleSceneOutcome.Lost)
         {
             HealParty();
             _profile.SetFlag("last_battle_lost", true);
-            TransitionToMap(_safeMapId, _safeTileX, _safeTileY);
+            if (!wasTrainerBattle && !wasBossBattle)
+                TransitionToMap(_safeMapId, _safeTileX, _safeTileY);
+            else
+                AutosaveCurrentGame();
         }
 
         State = GameState.Overworld;
+    }
+
+    private void ShowEndingScreen()
+    {
+        _endingData = new EndingScreenData
+        {
+            Party = _profile.Party.ToList(),
+            Captures = _profile.Captures.ToList(),
+            PlayTimeSeconds = _profile.PlayTimeSeconds,
+        };
+        State = GameState.EndingScreen;
+    }
+
+    private void TrackPlayTime(GameTime gameTime)
+    {
+        if (State is GameState.Title or GameState.Boot or GameState.EndingScreen)
+            return;
+
+        _profile.PlayTimeSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+    }
+
+    private void UpdateEndingScreen(GameTime gameTime)
+    {
+        if (_input.ConfirmPressed || _input.StartPressed)
+        {
+            _endingData = null;
+            State = GameState.Title;
+        }
     }
 
     private void HealParty()
@@ -790,6 +1210,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 var starter = species.CreateInstance(5);
                 _profile.Party.Add(starter);
                 _profile.SetFlag("received_starter", true);
+                AutosaveCurrentGame();
 
                 _dialogue.Start("Dr. Cedar", new[] { 
                     $"You chose {species.Name}!",
@@ -804,6 +1225,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 var starter = speciesFallback.CreateInstance(5);
                 _profile.Party.Add(starter);
                 _profile.SetFlag("received_starter", true);
+                AutosaveCurrentGame();
 
                 _dialogue.Start("Dr. Cedar", new[] { 
                     $"You chose {speciesFallback.Name}!",
@@ -815,6 +1237,20 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     }
 
     private void UpdatePartyScreen(GameTime gameTime)
+    {
+        if (_input.ConfirmPressed)
+        {
+            SaveCurrentGame();
+            return;
+        }
+
+        if (_input.CancelPressed)
+        {
+            State = GameState.Overworld;
+        }
+    }
+
+    private void UpdateInventoryScreen(GameTime gameTime)
     {
         if (_input.CancelPressed)
         {
@@ -834,7 +1270,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 DrawBoot();
                 break;
             case GameState.Title:
-                _title.Draw(_spriteBatch);
+                DrawTitle();
                 break;
             case GameState.Overworld:
                 DrawOverworld(gameTime);
@@ -847,6 +1283,12 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 break;
             case GameState.PartyScreen:
                 DrawPartyScreen();
+                break;
+            case GameState.InventoryScreen:
+                DrawInventoryScreen();
+                break;
+            case GameState.EndingScreen:
+                DrawEndingScreen();
                 break;
         }
 
@@ -868,6 +1310,18 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     {
         _spriteBatch.Begin();
         _spriteBatch.DrawString(_font, "Loading...", new Vector2(4, 4), Color.Gray);
+        _spriteBatch.End();
+    }
+
+    private void DrawTitle()
+    {
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        _title.Draw(_spriteBatch, _saveService?.SaveExists == true, _titleSelectionIndex);
+        if (!string.IsNullOrWhiteSpace(_saveStatusMessage))
+        {
+            var size = _font.MeasureString(_saveStatusMessage);
+            _spriteBatch.DrawString(_font, _saveStatusMessage, new Vector2((320 - size.X) / 2f, 162), Color.Yellow);
+        }
         _spriteBatch.End();
     }
 
@@ -995,6 +1449,10 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         {
             DrawFightMenu(_battleScene);
         }
+        else if (_battleScene.Mode == BattleSceneMode.Item)
+        {
+            DrawItemMenu(_battleScene);
+        }
         else
         {
             DrawMessageText(_battleScene.CurrentMessage, new Vector2(12, 144));
@@ -1051,14 +1509,32 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
 
     private void DrawCommandMenu(BattleScene scene)
     {
-        var menuRect = new Rectangle(210, 136, 96, 34);
+        var menuRect = new Rectangle(202, 134, 106, 38);
         DrawBorderedRect(_spriteBatch, menuRect, new Color(248, 248, 240), Color.Black, 1);
 
         for (int i = 0; i < scene.Commands.Count; i++)
         {
-            int y = menuRect.Y + 6 + i * 13;
+            int y = menuRect.Y + 4 + i * 11;
             _spriteBatch.DrawString(_font, scene.CommandIndex == i ? ">" : " ", new Vector2(menuRect.X + 6, y), Color.Black);
             _spriteBatch.DrawString(_font, scene.Commands[i], new Vector2(menuRect.X + 18, y), Color.Black);
+        }
+    }
+
+    private void DrawItemMenu(BattleScene scene)
+    {
+        DrawMessageText("Use which item?", new Vector2(12, 140));
+
+        var menuRect = new Rectangle(202, 134, 106, 38);
+        DrawBorderedRect(_spriteBatch, menuRect, new Color(248, 248, 240), Color.Black, 1);
+
+        for (int i = 0; i < scene.BattleItems.Count; i++)
+        {
+            if (!ItemCatalog.TryGet(scene.BattleItems[i], out var definition))
+                continue;
+
+            int y = menuRect.Y + 4 + i * 11;
+            _spriteBatch.DrawString(_font, scene.ItemIndex == i ? ">" : " ", new Vector2(menuRect.X + 6, y), Color.Black);
+            _spriteBatch.DrawString(_font, definition.Name, new Vector2(menuRect.X + 18, y), Color.Black);
         }
     }
 
@@ -1193,11 +1669,125 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             }
         }
 
+        if (!string.IsNullOrWhiteSpace(_saveStatusMessage))
+        {
+            var statusSize = _font.MeasureString(_saveStatusMessage);
+            _spriteBatch.DrawString(_font, _saveStatusMessage, new Vector2((320 - statusSize.X) / 2f, 132), Color.LightGreen);
+        }
+
         // Draw return prompt
-        var promptText = "Press ESC to return";
+        var promptText = "Enter: Save   ESC: Return";
         var promptSize = _font.MeasureString(promptText);
         _spriteBatch.DrawString(_font, promptText, new Vector2((320 - promptSize.X) / 2f, 146), Color.Yellow);
 
         _spriteBatch.End();
+    }
+
+    private void DrawInventoryScreen()
+    {
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+        DrawBorderedRect(_spriteBatch, new Rectangle(10, 10, 300, 160), new Color(15, 15, 15, 245), Color.DarkGray, 2);
+
+        var titleText = "INVENTORY";
+        var titleSize = _font.MeasureString(titleText);
+        _spriteBatch.DrawString(_font, titleText, new Vector2((320 - titleSize.X) / 2f, 16), Color.Gold);
+
+        if (_profile.Items.Slots.Count == 0)
+        {
+            var emptyText = "No items carried!";
+            var emptySize = _font.MeasureString(emptyText);
+            _spriteBatch.DrawString(_font, emptyText, new Vector2((320 - emptySize.X) / 2f, 80), Color.Gray);
+        }
+        else
+        {
+            for (int i = 0; i < _profile.Items.Slots.Count; i++)
+            {
+                var slot = _profile.Items.Slots[i];
+                if (!ItemCatalog.TryGet(slot.ItemId, out var definition))
+                    continue;
+
+                int y = 46 + i * 20;
+                _spriteBatch.DrawString(_font, definition.Name, new Vector2(20, y), Color.White);
+                _spriteBatch.DrawString(_font, $"x{slot.Quantity}", new Vector2(220, y), Color.LightGreen);
+            }
+        }
+
+        var promptText = "Press ESC to return  |  I to open";
+        var promptSize = _font.MeasureString(promptText);
+        _spriteBatch.DrawString(_font, promptText, new Vector2((320 - promptSize.X) / 2f, 146), Color.Yellow);
+
+        _spriteBatch.End();
+    }
+
+    private void DrawEndingScreen()
+    {
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+        DrawBorderedRect(_spriteBatch, new Rectangle(8, 8, 304, 164), new Color(12, 18, 28, 250), Color.Gold, 2);
+
+        var title = "JoyMon v0.1 complete.";
+        var titleSize = _font.MeasureString(title);
+        _spriteBatch.DrawString(_font, title, new Vector2((320 - titleSize.X) / 2f, 14), Color.Gold);
+
+        var data = _endingData;
+        int y = 36;
+
+        if (data is not null)
+        {
+            var playTime = FormatPlayTime(data.PlayTimeSeconds);
+            _spriteBatch.DrawString(_font, $"Play time: {playTime}", new Vector2(16, y), Color.LightGray);
+            y += 16;
+
+            _spriteBatch.DrawString(_font, "Party:", new Vector2(16, y), Color.White);
+            y += 14;
+            if (data.Party.Count == 0)
+            {
+                _spriteBatch.DrawString(_font, "  (empty)", new Vector2(16, y), Color.Gray);
+                y += 14;
+            }
+            else
+            {
+                foreach (var member in data.Party)
+                {
+                    var line = $"  {member.Species.Name} Lv.{member.Level}  {member.Species.TypeDisplay}  HP {member.CurrentHp}/{member.MaxHp}";
+                    _spriteBatch.DrawString(_font, line, new Vector2(16, y), Color.White);
+                    y += 12;
+                }
+            }
+
+            y += 4;
+            _spriteBatch.DrawString(_font, "Captures:", new Vector2(16, y), Color.White);
+            y += 14;
+            if (data.Captures.Count == 0)
+            {
+                _spriteBatch.DrawString(_font, "  (none)", new Vector2(16, y), Color.Gray);
+            }
+            else
+            {
+                foreach (var captureId in data.Captures)
+                {
+                    var displayName = captureId;
+                    if (_contentDb?.Species.TryGetValue(captureId, out var species) == true)
+                        displayName = species.Name;
+                    _spriteBatch.DrawString(_font, $"  {displayName}", new Vector2(16, y), Color.LightGreen);
+                    y += 12;
+                }
+            }
+        }
+
+        var prompt = "Press ENTER to return to title";
+        var promptSize = _font.MeasureString(prompt);
+        _spriteBatch.DrawString(_font, prompt, new Vector2((320 - promptSize.X) / 2f, 158), Color.Yellow);
+
+        _spriteBatch.End();
+    }
+
+    private static string FormatPlayTime(double totalSeconds)
+    {
+        var span = TimeSpan.FromSeconds(Math.Max(0, totalSeconds));
+        if (span.TotalHours >= 1)
+            return $"{(int)span.TotalHours}:{span.Minutes:D2}:{span.Seconds:D2}";
+        return $"{span.Minutes}:{span.Seconds:D2}";
     }
 }

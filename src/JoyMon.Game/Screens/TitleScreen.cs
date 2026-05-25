@@ -30,7 +30,7 @@ public sealed class TitleScreen
         }
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch spriteBatch, bool continueEnabled, int selectedIndex)
     {
         // ── Title ──
         var title = "JOYMON";
@@ -44,13 +44,25 @@ public sealed class TitleScreen
         float subX = (VirtualWidth - subSize.X) / 2f;
         spriteBatch.DrawString(_font, sub, new Vector2(subX, 68), Color.LightGray);
 
-        // ── Blinking prompt ──
+        DrawMenuOption(spriteBatch, "Continue", 0, continueEnabled, selectedIndex == 0);
+        DrawMenuOption(spriteBatch, "New Game", 1, true, selectedIndex == 1);
+
         if (_showPrompt)
         {
-            var prompt = "Press Enter / Start";
+            var prompt = "Enter / Start";
             var promptSize = _font.MeasureString(prompt);
             float promptX = (VirtualWidth - promptSize.X) / 2f;
-            spriteBatch.DrawString(_font, prompt, new Vector2(promptX, 130), Color.White);
+            spriteBatch.DrawString(_font, prompt, new Vector2(promptX, 148), Color.White);
         }
+    }
+
+    private void DrawMenuOption(SpriteBatch spriteBatch, string text, int index, bool enabled, bool selected)
+    {
+        var label = selected ? $"> {text}" : $"  {text}";
+        var size = _font.MeasureString(label);
+        float x = (VirtualWidth - size.X) / 2f;
+        float y = 112 + index * 14;
+        var color = enabled ? Color.White : Color.DimGray;
+        spriteBatch.DrawString(_font, label, new Vector2(x, y), color);
     }
 }

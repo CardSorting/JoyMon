@@ -347,7 +347,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet8/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

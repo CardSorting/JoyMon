@@ -1,0 +1,16 @@
+{
+  "id": "lanternox",
+  "displayName": "Lanternox",
+  "mapId": "trial-grove",
+  "gateTile": { "x": 10, "y": 1 },
+  "level": 6,
+  "creatureId": "lanternox",
+  "clearedFlag": "trial_grove_cleared",
+  "introDialogue": {
+    "speaker": "Lanternox",
+    "lines": [
+      "The Trial Grove gate hums with echo and tide...",
+      "Lanternox rises to test your bond!"
+    ]
+  }
+}

@@ -76,10 +76,92 @@ public class BattleSceneTests
         var scene = ReadyForCommand(new BattleScene(player, wild, AlwaysHitRng));
 
         scene.MoveDown();
+        scene.MoveDown();
+        scene.MoveDown();
         scene.Confirm();
 
         Assert.True(scene.State.IsOver);
         Assert.Equal(BattleSceneOutcome.Escaped, scene.Outcome);
+    }
+
+    [Fact]
+    public void SuccessfulCapture_AddsJoyMonToParty()
+    {
+        var profile = new PlayerProfile();
+        var player = MakeSpecies("Mossprout", baseHp: 30, baseAtk: 9, baseDef: 8, baseSpd: 20).CreateInstance(5);
+        var wild = MakeSpecies("Queuebee", baseHp: 24, baseAtk: 7, baseDef: 6, baseSpd: 8).CreateInstance(2);
+        profile.Party.Add(player);
+        var scene = ReadyForCommand(new BattleScene(player, wild, new DeterministicRng(0.0), profile));
+
+        Assert.Equal("Capture", scene.Commands[2]);
+        scene.MoveDown();
+        scene.MoveDown();
+        scene.Confirm();
+
+        Assert.Equal(BattleSceneOutcome.Captured, scene.Outcome);
+        Assert.True(scene.State.IsOver);
+        Assert.Contains(wild, profile.Party);
+        Assert.Equal(4, profile.Items.GetQuantity(ItemCatalog.SyncCapsuleId));
+    }
+
+    [Fact]
+    public void PartyFull_PreventsCapture()
+    {
+        var profile = new PlayerProfile();
+        var player = MakeSpecies("Mossprout", baseHp: 30, baseAtk: 9, baseDef: 8, baseSpd: 20).CreateInstance(5);
+        var wild = MakeSpecies("Queuebee", baseHp: 24, baseAtk: 7, baseDef: 6, baseSpd: 8).CreateInstance(2);
+        profile.Party.Add(player);
+        profile.Party.Add(MakeSpecies("Pebblit", baseHp: 30, baseAtk: 9, baseDef: 8, baseSpd: 20).CreateInstance(3));
+        profile.Party.Add(MakeSpecies("Staticrow", baseHp: 30, baseAtk: 9, baseDef: 8, baseSpd: 20).CreateInstance(3));
+        var scene = ReadyForCommand(new BattleScene(player, wild, new DeterministicRng(0.0), profile));
+
+        var result = scene.TryCapture();
+
+        Assert.Equal(CaptureResult.PartyFull, result);
+        Assert.False(scene.State.IsOver);
+        Assert.DoesNotContain(wild, profile.Party);
+        Assert.Equal(5, profile.Items.GetQuantity(ItemCatalog.SyncCapsuleId));
+    }
+
+    [Fact]
+    public void FailedCapture_DoesNotEndBattle()
+    {
+        var profile = new PlayerProfile();
+        var player = MakeSpecies("Mossprout", baseHp: 30, baseAtk: 9, baseDef: 8, baseSpd: 20).CreateInstance(5);
+        var wild = MakeSpecies("Queuebee", baseHp: 24, baseAtk: 7, baseDef: 6, baseSpd: 8).CreateInstance(2);
+        profile.Party.Add(player);
+        var scene = ReadyForCommand(new BattleScene(player, wild, new DeterministicRng(0.99), profile));
+
+        var result = scene.TryCapture();
+
+        Assert.Equal(CaptureResult.Failed, result);
+        Assert.False(scene.State.IsOver);
+        Assert.Equal(BattleSceneOutcome.None, scene.Outcome);
+        Assert.DoesNotContain(wild, profile.Party);
+        Assert.Equal(4, profile.Items.GetQuantity(ItemCatalog.SyncCapsuleId));
+    }
+
+    [Fact]
+    public void BerryTonic_HealsActiveJoyMonInBattle()
+    {
+        var profile = new PlayerProfile();
+        var player = MakeSpecies("Mossprout", baseHp: 30, baseAtk: 9, baseDef: 8, baseSpd: 20).CreateInstance(5);
+        var wild = MakeSpecies("Queuebee", baseHp: 24, baseAtk: 7, baseDef: 6, baseSpd: 8).CreateInstance(2);
+        profile.Party.Add(player);
+        player.CurrentHp = 12;
+        var scene = ReadyForCommand(new BattleScene(player, wild, AlwaysHitRng, profile));
+
+        scene.MoveDown();
+        scene.Confirm();
+        Assert.Equal(BattleSceneMode.Item, scene.Mode);
+
+        scene.Confirm();
+        while (scene.Mode == BattleSceneMode.Message)
+            scene.Confirm();
+
+        Assert.Equal(22, player.CurrentHp);
+        Assert.Equal(2, profile.Items.GetQuantity(ItemCatalog.BerryTonicId));
+        Assert.False(scene.State.IsOver);
     }
 
     [Fact]
@@ -107,6 +189,15 @@ public class BattleSceneTests
 
         Assert.Equal(BattleSceneMode.Command, scene.Mode);
         return scene;
+    }
+
+    [Fact]
+    public void PlayerProfile_StartsWithDefaultInventory()
+    {
+        var profile = new PlayerProfile();
+
+        Assert.Equal(5, profile.Items.GetQuantity(ItemCatalog.SyncCapsuleId));
+        Assert.Equal(3, profile.Items.GetQuantity(ItemCatalog.BerryTonicId));
     }
 
     private static JoyMonSpecies MakeSpecies(string name, int baseHp, int baseAtk, int baseDef, int baseSpd)

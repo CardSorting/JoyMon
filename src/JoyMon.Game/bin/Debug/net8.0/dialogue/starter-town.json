@@ -35,6 +35,69 @@
       "facingDirection": "up",
       "dialogueId": "tired-operator-talk",
       "spriteId": "operator"
+    },
+    {
+      "id": "starter-sign-lab",
+      "name": "Lab Sign",
+      "mapId": "starter-town",
+      "tilePosition": { "x": 10, "y": 8 },
+      "facingDirection": "down",
+      "dialogueId": "starter-sign-lab",
+      "spriteId": "sign"
+    },
+    {
+      "id": "starter-sign-route",
+      "name": "Route Sign",
+      "mapId": "starter-town",
+      "tilePosition": { "x": 13, "y": 8 },
+      "facingDirection": "down",
+      "dialogueId": "starter-sign-route",
+      "spriteId": "sign"
+    },
+    {
+      "id": "route-guide",
+      "name": "Route Guide",
+      "mapId": "route-1",
+      "tilePosition": { "x": 8, "y": 4 },
+      "facingDirection": "right",
+      "dialogueId": "route-guide-talk",
+      "spriteId": "kid"
+    },
+    {
+      "id": "route-sign-grove",
+      "name": "Grove Sign",
+      "mapId": "route-1",
+      "tilePosition": { "x": 11, "y": 1 },
+      "facingDirection": "down",
+      "dialogueId": "route-sign-grove",
+      "spriteId": "sign"
+    },
+    {
+      "id": "trial-grove-healer",
+      "name": "Grove Healer",
+      "mapId": "trial-grove",
+      "tilePosition": { "x": 9, "y": 12 },
+      "facingDirection": "right",
+      "dialogueId": "trial-grove-healer-talk",
+      "spriteId": "operator"
+    },
+    {
+      "id": "trial-grove-sign",
+      "name": "Trial Grove Sign",
+      "mapId": "trial-grove",
+      "tilePosition": { "x": 11, "y": 12 },
+      "facingDirection": "down",
+      "dialogueId": "trial-grove-sign",
+      "spriteId": "sign"
+    },
+    {
+      "id": "trial-grove-scout",
+      "name": "Grove Scout",
+      "mapId": "trial-grove",
+      "tilePosition": { "x": 3, "y": 11 },
+      "facingDirection": "right",
+      "dialogueId": "trial-grove-scout-talk",
+      "spriteId": "kid"
     }
   ],
   "dialogues": [
@@ -42,52 +105,109 @@
       "id": "dr-cedar-talk",
       "speaker": "Dr. Cedar",
       "lines": [
-        "Hello there! I am Dr. Cedar.",
-        "Welcome to Starter Town!",
-        "Are you ready for your JoyMon adventure?"
+        "Good timing. The joy meters around town are finally stable.",
+        "Take one starter JoyMon before you step onto Route 1.",
+        "A partner and a few Sync Capsules are enough to begin."
       ]
     },
     {
       "id": "dr-cedar-after",
       "speaker": "Dr. Cedar",
       "lines": [
-        "Take good care of your JoyMon!",
-        "It will grow stronger as you travel together."
+        "Your JoyMon will grow after real battles, not training dummies.",
+        "If the grove wears you down, find the healer near its entrance.",
+        "Come back after the trial. I want to see your notes."
       ]
     },
     {
       "id": "sleepy-guard-block",
       "speaker": "Sleepy Route Guard",
       "lines": [
-        "Hold it! Route 1 is dangerous.",
-        "You cannot pass without a JoyMon!",
-        "Go see Dr. Cedar in town first."
+        "Hold it. Route 1 looks calm until the grass starts buzzing.",
+        "No JoyMon, no route pass.",
+        "Dr. Cedar can fix that."
       ]
     },
     {
       "id": "sleepy-guard-talk",
       "speaker": "Sleepy Route Guard",
       "lines": [
-        "Zzz... No entry to Route 1...",
-        "Wait, let me sleep for five more minutes..."
+        "Route 1 is open. Stay on the pale path if you need a breather.",
+        "The tall grass is good practice, but do not waste every Berry Tonic.",
+        "Trial Grove is north. The healer waits just inside."
       ]
     },
     {
       "id": "tutorial-kid-talk",
       "speaker": "Tutorial Kid",
       "lines": [
-        "Hey! Did you know?",
-        "You can press F3 to toggle the debug menu!",
-        "It's super cool!"
+        "Tall grass can start wild battles after you receive a starter.",
+        "Use Sync Capsules to capture weakened wild JoyMon.",
+        "Press Escape for your party, and I for your bag."
       ]
     },
     {
       "id": "tired-operator-talk",
       "speaker": "Tired Operator",
       "lines": [
-        "I've been monitoring these servers all day.",
-        "Nothing but packet loss...",
-        "I need some coffee."
+        "I watched the route monitors all night.",
+        "Queuebee are quick, Rootsnail are sturdy, and Cindermite hits harder than it looks.",
+        "A Berry Tonic at the right time beats panic every time."
+      ]
+    },
+    {
+      "id": "starter-sign-lab",
+      "speaker": "Sign",
+      "lines": [
+        "Cedar Field Lab: starters, field notes, and emergency coffee."
+      ]
+    },
+    {
+      "id": "starter-sign-route",
+      "speaker": "Sign",
+      "lines": [
+        "North: Route 1. Trainers should carry a starter and at least one tonic."
+      ]
+    },
+    {
+      "id": "route-guide-talk",
+      "speaker": "Route Guide",
+      "lines": [
+        "The path is safe, but the grass gives better practice.",
+        "If Kai challenges you, use your strongest move and heal before Trial Grove.",
+        "The grove entrance is straight north."
+      ]
+    },
+    {
+      "id": "route-sign-grove",
+      "speaker": "Sign",
+      "lines": [
+        "North: Trial Grove.",
+        "Warning: the lantern gate only opens for trainers who keep moving forward."
+      ]
+    },
+    {
+      "id": "trial-grove-healer-talk",
+      "speaker": "Grove Healer",
+      "lines": [
+        "The grove can be noisy for a first trial.",
+        "Rest here. Your party is healed and ready."
+      ]
+    },
+    {
+      "id": "trial-grove-sign",
+      "speaker": "Sign",
+      "lines": [
+        "Trial Grove: follow the pale trail when you are tired.",
+        "Step into the grass if your partner needs more battle rhythm."
+      ]
+    },
+    {
+      "id": "trial-grove-scout-talk",
+      "speaker": "Grove Scout",
+      "lines": [
+        "Glimmoo hide in the shady patches. They are gentle, but they do not quit.",
+        "The healer is by the entrance, so loop back before the gate if you need to."
       ]
     }
   ]

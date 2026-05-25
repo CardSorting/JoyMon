@@ -1,0 +1,14 @@
+{
+  "id": "lanternox",
+  "name": "Lanternox",
+  "type": "Echo",
+  "secondaryType": "Tide",
+  "baseStats": {
+    "maxHp": 44,
+    "attack": 7,
+    "defense": 8,
+    "speed": 6
+  },
+  "starterEligible": false,
+  "learnset": ["echo-chirp", "tide-slap", "guard-curl"]
+}

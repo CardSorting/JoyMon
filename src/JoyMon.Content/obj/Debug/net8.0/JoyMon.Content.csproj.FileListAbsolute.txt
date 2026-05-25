@@ -13,3 +13,4 @@
 /Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/refint/JoyMon.Content.dll
 /Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.Content.pdb
 /Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/ref/JoyMon.Content.dll
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.Content.sourcelink.json

@@ -29,4 +29,7 @@ public interface IInputService
 
     /// <summary>Any Start-like key (Enter, Space, GamePad Start) for boot/title transitions.</summary>
     bool StartPressed { get; }
+
+    /// <summary>I key — open inventory in overworld.</summary>
+    bool InventoryPressed { get; }
 }

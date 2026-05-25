@@ -8,6 +8,7 @@ public class JoyMonSpecies
 {
     public string Name { get; }
     public JoyMonType Type { get; }
+    public string TypeDisplay { get; }
     public int BaseMaxHp { get; }
     public int BaseAttack { get; }
     public int BaseDefense { get; }
@@ -21,10 +22,12 @@ public class JoyMonSpecies
         int baseAttack,
         int baseDefense,
         int baseSpeed,
-        IReadOnlyList<MoveDefinition> moves)
+        IReadOnlyList<MoveDefinition> moves,
+        string? typeDisplay = null)
     {
         Name = name;
         Type = type;
+        TypeDisplay = typeDisplay ?? type.ToString();
         BaseMaxHp = baseMaxHp;
         BaseAttack = baseAttack;
         BaseDefense = baseDefense;

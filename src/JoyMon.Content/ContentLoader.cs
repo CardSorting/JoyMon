@@ -233,6 +233,12 @@ public class ContentLoader
             if (string.IsNullOrWhiteSpace(raw.Id)) continue;
 
             var type = ParseType(raw.Type, $"creature '{raw.Id}'", validation);
+            string? typeDisplay = null;
+            if (!string.IsNullOrWhiteSpace(raw.SecondaryType))
+            {
+                _ = ParseType(raw.SecondaryType, $"creature '{raw.Id}' secondaryType", validation);
+                typeDisplay = $"{raw.Type}/{raw.SecondaryType}";
+            }
 
             var moves = new List<MoveDefinition>();
             if (raw.Learnset is not null)
@@ -257,7 +263,8 @@ public class ContentLoader
                 raw.BaseStats.Attack,
                 raw.BaseStats.Defense,
                 raw.BaseStats.Speed,
-                moves);
+                moves,
+                typeDisplay);
 
             dict[raw.Id] = species;
         }

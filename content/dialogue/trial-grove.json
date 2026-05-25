@@ -1,0 +1,24 @@
+{
+  "npcs": [
+    {
+      "id": "trial-grove-healer",
+      "name": "Elder Willow",
+      "mapId": "trial-grove",
+      "tilePosition": { "x": 4, "y": 8 },
+      "facingDirection": "right",
+      "dialogueId": "elder-willow-heal",
+      "spriteId": "elder-willow"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "elder-willow-heal",
+      "speaker": "Elder Willow",
+      "lines": [
+        "Welcome, young adventurer.",
+        "The Grove's ancient energy flows through these roots.",
+        "Let me restore your party's strength before you proceed."
+      ]
+    }
+  ]
+}

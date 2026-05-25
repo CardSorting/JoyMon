@@ -3,6 +3,6 @@
   "name": "Pebble Toss",
   "type": "Stone",
   "power": 50,
-  "accuracy": 85,
+  "accuracy": 90,
   "maxUses": 10
 }

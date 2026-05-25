@@ -16,6 +16,9 @@ public class CreatureContent
     [JsonPropertyName("type")]
     public string Type { get; init; } = string.Empty;
 
+    [JsonPropertyName("secondaryType")]
+    public string? SecondaryType { get; init; }
+
     [JsonPropertyName("baseStats")]
     public BaseStatsContent BaseStats { get; init; } = new();
 

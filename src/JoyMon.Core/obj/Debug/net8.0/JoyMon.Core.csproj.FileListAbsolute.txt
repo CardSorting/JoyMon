@@ -9,3 +9,4 @@
 /Users/bozoegg/Desktop/JoyMon/src/JoyMon.Core/obj/Debug/net8.0/refint/JoyMon.Core.dll
 /Users/bozoegg/Desktop/JoyMon/src/JoyMon.Core/obj/Debug/net8.0/JoyMon.Core.pdb
 /Users/bozoegg/Desktop/JoyMon/src/JoyMon.Core/obj/Debug/net8.0/ref/JoyMon.Core.dll
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Core/obj/Debug/net8.0/JoyMon.Core.sourcelink.json

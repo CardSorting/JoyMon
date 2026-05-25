@@ -1,0 +1,27 @@
+{
+  "id": "trial-grove-encounters",
+  "mapId": "trial-grove",
+  "zoneId": "forest",
+  "tileIds": [1],
+  "encounterRate": 0.12,
+  "entries": [
+    {
+      "creatureId": "rootsnail",
+      "minLevel": 3,
+      "maxLevel": 5,
+      "weight": 40
+    },
+    {
+      "creatureId": "queuebee",
+      "minLevel": 3,
+      "maxLevel": 5,
+      "weight": 35
+    },
+    {
+      "creatureId": "glimmoo",
+      "minLevel": 3,
+      "maxLevel": 4,
+      "weight": 25
+    }
+  ]
+}

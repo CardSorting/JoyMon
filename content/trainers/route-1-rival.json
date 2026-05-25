@@ -1,0 +1,29 @@
+{
+  "id": "route-1-rival",
+  "displayName": "Kai",
+  "mapId": "route-1",
+  "tilePosition": { "x": 14, "y": 7 },
+  "sightRange": 0,
+  "facingDirection": "left",
+  "spriteId": "rival",
+  "dialogueBefore": {
+    "speaker": "Kai",
+    "lines": [
+      "Hey! You got a JoyMon too?",
+      "Let's see who's stronger!"
+    ]
+  },
+  "dialogueAfter": {
+    "speaker": "Kai",
+    "lines": [
+      "Not bad at all!",
+      "I'll get stronger before we meet again."
+    ]
+  },
+  "party": [
+    {
+      "creatureId": "queuebee",
+      "level": 4
+    }
+  ]
+}
