@@ -77,7 +77,8 @@
                 "x": 10,
                 "y": 0
             },
-            "requiredFlag": "old_watermill_cleared"
+            "requiredFlag": "old_watermill_cleared",
+            "oneWayReason": "Bridge crossing is an unlock gate into the next region."
         }
     ]
 }

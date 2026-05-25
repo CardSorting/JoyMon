@@ -1,0 +1,14 @@
+{
+  "id": "chilleaf",
+  "name": "Chilleaf",
+  "type": "Frost",
+  "secondaryType": "Moss",
+  "baseStats": {
+    "maxHp": 58,
+    "attack": 8,
+    "defense": 12,
+    "speed": 6
+  },
+  "starterEligible": false,
+  "learnset": ["moss-tap", "guard-curl", "tackle"]
+}

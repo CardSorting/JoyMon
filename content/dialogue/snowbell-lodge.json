@@ -1,0 +1,125 @@
+{
+  "npcs": [
+    {
+      "id": "frostveil-trainer-1",
+      "name": "Snowline Trainer",
+      "mapId": "frostveil-path",
+      "tilePosition": { "x": 8, "y": 8 },
+      "facingDirection": "down",
+      "dialogueId": "frostveil-trainer-1-talk",
+      "spriteId": "operator"
+    },
+    {
+      "id": "frostveil-trainer-2",
+      "name": "Ice Patch Trainer",
+      "mapId": "frostveil-path",
+      "tilePosition": { "x": 13, "y": 5 },
+      "facingDirection": "left",
+      "dialogueId": "frostveil-trainer-2-talk",
+      "spriteId": "kid"
+    },
+    {
+      "id": "snowbell-healer",
+      "name": "Lodge Medic",
+      "mapId": "snowbell-lodge",
+      "tilePosition": { "x": 4, "y": 8 },
+      "facingDirection": "right",
+      "dialogueId": "snowbell-healer-talk",
+      "spriteId": "operator"
+    },
+    {
+      "id": "snowbell-keeper",
+      "name": "Lodge Keeper",
+      "mapId": "snowbell-lodge",
+      "tilePosition": { "x": 7, "y": 3 },
+      "facingDirection": "down",
+      "dialogueId": "snowbell-keeper-talk",
+      "spriteId": "dr-cedar"
+    },
+    {
+      "id": "snowbell-scout",
+      "name": "Ridge Scout",
+      "mapId": "snowbell-lodge",
+      "tilePosition": { "x": 10, "y": 7 },
+      "facingDirection": "left",
+      "dialogueId": "snowbell-scout-talk",
+      "spriteId": "guard"
+    },
+    {
+      "id": "snowbell-guest",
+      "name": "Snowbound Guest",
+      "mapId": "snowbell-lodge",
+      "tilePosition": { "x": 13, "y": 9 },
+      "facingDirection": "up",
+      "dialogueId": "snowbell-guest-talk",
+      "spriteId": "kid"
+    },
+    {
+      "id": "snowbell-shrine-gate",
+      "name": "Shrine Entrance",
+      "mapId": "snowbell-lodge",
+      "tilePosition": { "x": 15, "y": 1 },
+      "facingDirection": "down",
+      "dialogueId": "snowbell-shrine-gate-talk",
+      "spriteId": "sign"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "frostveil-trainer-1-talk",
+      "speaker": "Snowline Trainer",
+      "lines": [
+        "The snow grass ahead hides Frost-type JoyMon.",
+        "I'll battle you once the lodge posts the route permits."
+      ]
+    },
+    {
+      "id": "frostveil-trainer-2-talk",
+      "speaker": "Ice Patch Trainer",
+      "lines": [
+        "These ice patches look harmless until you lose your footing.",
+        "Come back later and I'll test your balance in battle."
+      ]
+    },
+    {
+      "id": "snowbell-healer-talk",
+      "speaker": "Lodge Medic",
+      "lines": [
+        "Cold drains a party faster than a long fight.",
+        "Warm up here. Your JoyMon are healed."
+      ]
+    },
+    {
+      "id": "snowbell-keeper-talk",
+      "speaker": "Lodge Keeper",
+      "lines": [
+        "Welcome to Snowbell Lodge.",
+        "The mountain lift is running again, so travelers from Ashbend can finally reach us."
+      ]
+    },
+    {
+      "id": "snowbell-scout-talk",
+      "speaker": "Ridge Scout",
+      "lines": [
+        "Snobble hold the path when storms blow in.",
+        "Chilleaf stay near green breaks in the snow."
+      ]
+    },
+    {
+      "id": "snowbell-guest-talk",
+      "speaker": "Snowbound Guest",
+      "lines": [
+        "I saw Staticrow sparking through the snowfall.",
+        "Even familiar JoyMon behave differently this high up."
+      ]
+    },
+    {
+      "id": "snowbell-shrine-gate-talk",
+      "speaker": "Shrine Entrance",
+      "lines": [
+        "The shrine path is sealed by packed snow and old ice.",
+        "A formal expedition will be needed before anyone goes farther."
+      ]
+    }
+  ]
+}

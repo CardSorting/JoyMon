@@ -1,0 +1,13 @@
+{
+  "id": "cragmite",
+  "name": "Cragmite",
+  "type": "Stone",
+  "baseStats": {
+    "maxHp": 72,
+    "attack": 7,
+    "defense": 16,
+    "speed": 5
+  },
+  "starterEligible": false,
+  "learnset": ["pebble-toss", "guard-curl", "tackle"]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "frostveil-path-encounters",
+  "mapId": "frostveil-path",
+  "zoneId": "snow-grass",
+  "tileIds": [9],
+  "encounterRate": 0.12,
+  "entries": [
+    {
+      "creatureId": "snobble",
+      "minLevel": 16,
+      "maxLevel": 18,
+      "weight": 35
+    },
+    {
+      "creatureId": "chilleaf",
+      "minLevel": 17,
+      "maxLevel": 19,
+      "weight": 25
+    },
+    {
+      "creatureId": "staticrow",
+      "minLevel": 16,
+      "maxLevel": 18,
+      "weight": 20
+    },
+    {
+      "creatureId": "rootsnail",
+      "minLevel": 17,
+      "maxLevel": 18,
+      "weight": 20
+    }
+  ]
+}

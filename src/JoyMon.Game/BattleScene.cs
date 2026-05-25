@@ -77,7 +77,7 @@ public sealed class BattleScene
         {
             var bossName = string.IsNullOrWhiteSpace(bossDisplayName) ? opponentJoyMon.Species.Name : bossDisplayName;
             _messages.Enqueue($"{bossName} appeared!");
-            _messages.Enqueue("The Trial Grove guardian awaits!");
+            _messages.Enqueue("The guardian awaits!");
             _messages.Enqueue($"Go, {playerJoyMon.Species.Name}!");
         }
         else if (isTrainerBattle)

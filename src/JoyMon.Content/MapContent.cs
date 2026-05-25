@@ -33,6 +33,9 @@ public class MapContent
 
     [JsonPropertyName("transitions")]
     public List<MapTransitionContent> Transitions { get; init; } = new();
+
+    [JsonPropertyName("triggers")]
+    public List<MapTriggerContent> Triggers { get; init; } = new();
 }
 
 public class MapTransitionContent
@@ -51,6 +54,9 @@ public class MapTransitionContent
 
     [JsonPropertyName("requiredFlag")]
     public string? RequiredFlag { get; init; }
+
+    [JsonPropertyName("oneWayReason")]
+    public string? OneWayReason { get; init; }
 }
 
 public class TransitionTileContent

@@ -1,0 +1,33 @@
+{
+  "id": "ashbend-mine-encounters",
+  "mapId": "ashbend-mine",
+  "zoneId": "mine-tunnels",
+  "tileIds": [2, 1],
+  "encounterRate": 0.16,
+  "entries": [
+    {
+      "creatureId": "pebblit",
+      "minLevel": 13,
+      "maxLevel": 15,
+      "weight": 30
+    },
+    {
+      "creatureId": "coalboar",
+      "minLevel": 14,
+      "maxLevel": 16,
+      "weight": 30
+    },
+    {
+      "creatureId": "cragmite",
+      "minLevel": 15,
+      "maxLevel": 15,
+      "weight": 20
+    },
+    {
+      "creatureId": "smokowl",
+      "minLevel": 15,
+      "maxLevel": 16,
+      "weight": 20
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "npcs": [
+    {
+      "id": "ashbend-foreman",
+      "name": "Mine Foreman",
+      "mapId": "ashbend-mine",
+      "tilePosition": { "x": 2, "y": 9 },
+      "facingDirection": "right",
+      "dialogueId": "ashbend-foreman-talk",
+      "spriteId": "guard"
+    },
+    {
+      "id": "ashbend-mine-healer",
+      "name": "Tunnel Medic",
+      "mapId": "ashbend-mine",
+      "tilePosition": { "x": 12, "y": 9 },
+      "facingDirection": "left",
+      "dialogueId": "ashbend-mine-healer-talk",
+      "spriteId": "operator"
+    },
+    {
+      "id": "ashbend-boss-chamber-sign",
+      "name": "Heart Tunnel Plaque",
+      "mapId": "ashbend-mine",
+      "tilePosition": { "x": 9, "y": 2 },
+      "facingDirection": "down",
+      "dialogueId": "ashbend-boss-chamber-talk",
+      "spriteId": "sign"
+    },
+    {
+      "id": "ashbend-mine-entrance-sign",
+      "name": "Mine Entrance Sign",
+      "mapId": "ashbend-mine",
+      "tilePosition": { "x": 1, "y": 9 },
+      "facingDirection": "down",
+      "dialogueId": "ashbend-mine-entrance-talk",
+      "spriteId": "sign"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "ashbend-foreman-talk",
+      "speaker": "Mine Foreman",
+      "lines": [
+        "Hold up — nobody crosses the collapsed haul without a Mine Pass.",
+        "Take this stamp. Clear the cart switch and mind the lanterns.",
+        "You're authorized for the inner tunnels now."
+      ]
+    },
+    {
+      "id": "ashbend-foreman-talk-pass",
+      "speaker": "Mine Foreman",
+      "lines": [
+        "Your pass is still good.",
+        "Lower the cart track before you try the rockfall route."
+      ]
+    },
+    {
+      "id": "ashbend-mine-healer-talk",
+      "speaker": "Tunnel Medic",
+      "lines": [
+        "Ash dust chews through stamina faster than you'd think.",
+        "I'll patch up your party before you push deeper.",
+        "Your JoyMon are rested and ready."
+      ]
+    },
+    {
+      "id": "ashbend-boss-chamber-talk",
+      "speaker": "Heart Tunnel Plaque",
+      "lines": [
+        "HEART TUNNEL — AUTHORIZED PERSONNEL ONLY",
+        "Cindralith has claimed the deepest chamber.",
+        "Approach the gate when you are prepared to battle."
+      ]
+    },
+    {
+      "id": "ashbend-mine-entrance-talk",
+      "speaker": "Mine Entrance Sign",
+      "lines": [
+        "ASHBEND MINE — HAULAGE LEVEL",
+        "Flip the cart switch to open the lower crossing.",
+        "Foreman office: west tunnel. Medic station: east tunnel."
+      ]
+    }
+  ]
+}

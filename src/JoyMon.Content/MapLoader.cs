@@ -84,13 +84,16 @@ public class MapLoader
                 if (!string.IsNullOrWhiteSpace(trans.ToMapId))
                 {
                     var targetPath = Path.Combine(_mapsDirectory, $"{trans.ToMapId}.json");
-                    if (!File.Exists(targetPath))
+                    var allowsMissingTarget = !string.IsNullOrWhiteSpace(trans.OneWayReason);
+                    if (!File.Exists(targetPath) && !allowsMissingTarget)
                     {
                         validation.AddError($"Map '{filename}' transitions to missing map '{trans.ToMapId}'");
                     }
                 }
             }
         }
+
+        ValidateTriggers(map, filename, validation);
 
         validation.ThrowIfInvalid();
 
@@ -165,6 +168,34 @@ public class MapLoader
 
                 if (trans.ToTile.X < 0 || trans.ToTile.Y < 0)
                     validation.AddError($"Map '{filename}' transition toTile ({trans.ToTile.X},{trans.ToTile.Y}) has invalid negative coordinates");
+            }
+        }
+    }
+
+    private static void ValidateTriggers(MapContent map, string filename, ContentValidationResult validation)
+    {
+        if (map.Triggers is null) return;
+
+        foreach (var trigger in map.Triggers)
+        {
+            if (string.IsNullOrWhiteSpace(trigger.Id))
+                validation.AddError($"Map '{filename}' has trigger missing 'id'");
+            if (string.IsNullOrWhiteSpace(trigger.Kind))
+                validation.AddError($"Map '{filename}' trigger '{trigger.Id}' missing 'kind'");
+
+            if (map.Width > 0 && map.Height > 0)
+            {
+                if (trigger.Tile.X < 0 || trigger.Tile.X >= map.Width || trigger.Tile.Y < 0 || trigger.Tile.Y >= map.Height)
+                    validation.AddError($"Map '{filename}' trigger '{trigger.Id}' tile out of bounds");
+            }
+
+            foreach (var tile in trigger.BridgeTiles.Concat(trigger.TrackTiles).Concat(trigger.RockTiles).Concat(trigger.DoorTiles))
+            {
+                if (map.Width > 0 && map.Height > 0
+                    && (tile.X < 0 || tile.X >= map.Width || tile.Y < 0 || tile.Y >= map.Height))
+                {
+                    validation.AddError($"Map '{filename}' trigger '{trigger.Id}' references out-of-bounds tile ({tile.X},{tile.Y})");
+                }
             }
         }
     }

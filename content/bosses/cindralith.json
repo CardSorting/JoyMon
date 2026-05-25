@@ -1,0 +1,17 @@
+{
+  "id": "cindralith",
+  "displayName": "Cindralith",
+  "mapId": "ashbend-mine",
+  "gateTile": { "x": 8, "y": 2 },
+  "level": 17,
+  "creatureId": "cindralith",
+  "clearedFlag": "ashbend_mine_cleared",
+  "introDialogue": {
+    "speaker": "Cindralith",
+    "lines": [
+      "The mine walls pulse with emberlight...",
+      "Stone plates grind across the tunnel floor.",
+      "Cindralith bars the heart of Ashbend Mine!"
+    ]
+  }
+}

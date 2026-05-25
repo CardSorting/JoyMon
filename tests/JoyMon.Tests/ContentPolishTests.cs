@@ -73,7 +73,7 @@ public class ContentPolishTests
             {
                 Assert.True(entry.MinLevel > 0, $"{table.Id}:{entry.CreatureId} minLevel must be positive.");
                 Assert.True(entry.MaxLevel >= entry.MinLevel, $"{table.Id}:{entry.CreatureId} maxLevel must be >= minLevel.");
-                Assert.True(entry.MaxLevel <= 6, $"{table.Id}:{entry.CreatureId} is above the current slice balance cap.");
+                Assert.True(entry.MaxLevel <= 19, $"{table.Id}:{entry.CreatureId} is above the current region balance cap.");
             }
         }
     }

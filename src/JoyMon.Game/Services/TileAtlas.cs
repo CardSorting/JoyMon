@@ -24,6 +24,8 @@ public sealed class TileAtlas
         new Color(0x2E, 0x7D, 0x32),    // 6: tree
         new Color(0xFF, 0xC1, 0x07),    // 7: sign
         new Color(0x8D, 0x6E, 0x63),    // 8: roof / building
+        new Color(0xE6, 0xF4, 0xFA),    // 9: snow grass
+        new Color(0x9A, 0xD7, 0xF5),    // 10: ice
     };
 
     /// <summary>Number of tile columns in the generated texture.</summary>

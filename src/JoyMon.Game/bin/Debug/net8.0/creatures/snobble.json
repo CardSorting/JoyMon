@@ -1,0 +1,14 @@
+{
+  "id": "snobble",
+  "name": "Snobble",
+  "type": "Frost",
+  "secondaryType": null,
+  "baseStats": {
+    "maxHp": 64,
+    "attack": 7,
+    "defense": 16,
+    "speed": 4
+  },
+  "starterEligible": false,
+  "learnset": ["guard-curl", "tackle"]
+}

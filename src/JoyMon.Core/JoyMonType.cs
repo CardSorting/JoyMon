@@ -11,5 +11,6 @@ public enum JoyMonType
     Tide,
     Ember,
     Echo,
+    Frost,
     Neutral
 }

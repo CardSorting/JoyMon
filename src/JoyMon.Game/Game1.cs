@@ -111,8 +111,9 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     private string? _activeTrainerId;
 
     // Boss
-    private BossContent? _boss;
-    private bool _pendingBossBattle;
+    private readonly Dictionary<string, BossContent> _bossesByMapId = new();
+    private BossContent? _pendingBoss;
+    private BossContent? _activeBoss;
     private bool _activeBossBattle;
     private EndingScreenData? _endingData;
     private string? _lastWildSpeciesId;
@@ -319,7 +320,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             System.Diagnostics.Debug.WriteLine($"Trainers load failed: {ex.Message}");
         }
 
-        // Load boss from JSON
+        // Load bosses from JSON
         try
         {
             var bossesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bosses");
@@ -327,9 +328,12 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             {
                 var loader = new BossLoader(bossesDir);
                 var validCreatureIds = _contentDb.Species.Keys.ToHashSet();
-                var bossFile = Path.Combine(bossesDir, "lanternox-trial.json");
-                if (File.Exists(bossFile))
-                    _boss = loader.Load("lanternox-trial.json", validCreatureIds);
+                _bossesByMapId.Clear();
+                foreach (var file in Directory.EnumerateFiles(bossesDir, "*.json"))
+                {
+                    var boss = loader.Load(Path.GetFileName(file), validCreatureIds);
+                    _bossesByMapId[boss.MapId] = boss;
+                }
             }
         }
         catch (Exception ex)
@@ -646,7 +650,8 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         _profile.PlayTimeSeconds = 0;
         _defeatedTrainers.Clear();
         _endingData = null;
-        _pendingBossBattle = false;
+        _pendingBoss = null;
+        _activeBoss = null;
         _talkingToDrCedar = false;
         _dialogue.Close();
 
@@ -740,10 +745,11 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                         _pendingTrainerBattleId = null;
                         StartTrainerBattle(trainerId);
                     }
-                    else if (_pendingBossBattle)
+                    else if (_pendingBoss is not null)
                     {
-                        _pendingBossBattle = false;
-                        StartBossBattle();
+                        var boss = _pendingBoss;
+                        _pendingBoss = null;
+                        StartBossBattle(boss);
                     }
                 }
             }
@@ -793,14 +799,26 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 {
                     _talkingToDrCedar = true;
                 }
-                else if (npc.Id == "trial-grove-healer")
+                else if (npc.Id is "trial-grove-healer" or "ashbend-healer" or "ashbend-mine-healer" or "snowbell-healer")
                 {
                     HealParty();
                     AutosaveCurrentGame();
                 }
-
                 string dialogueId = npc.DialogueId;
-                if (npc.Id == "dr-cedar" && _profile.HasFlag("received_starter"))
+                if (npc.Id == "ashbend-foreman")
+                {
+                    if (!_profile.HasFlag(MineFlags.MinePass))
+                    {
+                        _profile.SetFlag(MineFlags.MinePass, true);
+                        dialogueId = "ashbend-foreman-talk";
+                        AutosaveCurrentGame();
+                    }
+                    else
+                    {
+                        dialogueId = "ashbend-foreman-talk-pass";
+                    }
+                }
+                else if (npc.Id == "dr-cedar" && _profile.HasFlag("received_starter"))
                 {
                     dialogueId = "dr-cedar-after";
                 }
@@ -808,11 +826,26 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 {
                     dialogueId = "sleepy-guard-block";
                 }
+                else if (npc.MapId == "ashbend-camp" && _profile.HasFlag("ashbend_mine_cleared"))
+                {
+                    var clearedDialogueId = $"{npc.DialogueId}-cleared";
+                    if (_dialogues.ContainsKey(clearedDialogueId))
+                        dialogueId = clearedDialogueId;
+                }
 
                 if (_dialogues.TryGetValue(dialogueId, out var dlg))
                 {
                     _dialogue.Start(dlg.Speaker, dlg.Lines);
                 }
+                return;
+            }
+
+            if (_currentMap is not null
+                && MapInteractionService.TryInteract(_currentMap, _profile, tx, ty, out var triggerMessage, HealParty))
+            {
+                if (!string.IsNullOrWhiteSpace(triggerMessage))
+                    _dialogue.Start("Notice", new[] { triggerMessage });
+                AutosaveCurrentGame();
                 return;
             }
         }
@@ -840,17 +873,14 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             if (_npcs.Any(npc => npc.MapId == _currentMap.Id && npc.X == x && npc.Y == y))
                 return false;
             // Collision layer check
-            if (_currentMap.Layers.Collision[y][x] != 0)
-                return false;
-
-            // Gated transition check
-            var transition = _currentMap.Transitions.FirstOrDefault(t => t.FromTile.X == x && t.FromTile.Y == y);
-            if (transition is not null && !string.IsNullOrEmpty(transition.RequiredFlag))
+            if (!MapInteractionService.IsTileWalkable(_currentMap, _profile, x, y))
             {
-                if (!_profile.HasFlag(transition.RequiredFlag))
+                if (MapInteractionService.TryGetBlockedMessage(_currentMap, _profile, x, y, out var blockedMessage)
+                    && !string.IsNullOrWhiteSpace(blockedMessage))
                 {
-                    return false;
+                    _dialogue.Start("Notice", new[] { blockedMessage });
                 }
+                return false;
             }
 
             return true;
@@ -912,11 +942,14 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
 
     private bool TryTriggerBossGate()
     {
-        if (_boss is null || _currentMap is null || _dialogue.IsActive)
+        if (_currentMap is null || _dialogue.IsActive)
+            return false;
+
+        if (!_bossesByMapId.TryGetValue(_currentMap.Id, out var boss))
             return false;
 
         var trigger = BossInteraction.TryTriggerGate(
-            _boss,
+            boss,
             _profile,
             _currentMap.Id,
             _player.X,
@@ -925,8 +958,8 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         if (trigger != BossGateTriggerResult.StartIntroDialogue)
             return false;
 
-        _dialogue.Start(_boss.IntroDialogue.Speaker, _boss.IntroDialogue.Lines);
-        _pendingBossBattle = true;
+        _dialogue.Start(boss.IntroDialogue.Speaker, boss.IntroDialogue.Lines);
+        _pendingBoss = boss;
         return true;
     }
 
@@ -976,6 +1009,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
 
         _activeTrainerId = null;
         _activeBossBattle = false;
+        _activeBoss = null;
         _lastWildSpeciesId = speciesId;
         _wildEncounter = wildJoyMon;
         _battleScene = new BattleScene(activeJoyMon, wildJoyMon, new BattleRngAdapter(_rng), _profile);
@@ -1021,6 +1055,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
 
         _activeTrainerId = trainerId;
         _activeBossBattle = false;
+        _activeBoss = null;
         _wildEncounter = null;
         _battleScene = new BattleScene(
             activeJoyMon,
@@ -1049,9 +1084,9 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         return species.CreateInstance(member.Level);
     }
 
-    private void StartBossBattle()
+    private void StartBossBattle(BossContent boss)
     {
-        if (_boss is null || BossInteraction.IsCleared(_profile, _boss))
+        if (BossInteraction.IsCleared(_profile, boss))
             return;
 
         var activeJoyMon = _profile.Party.FirstOrDefault(joymon => !joymon.IsFainted)
@@ -1060,12 +1095,13 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         if (activeJoyMon is null || _contentDb is null)
             return;
 
-        if (!_contentDb.Species.TryGetValue(_boss.CreatureId, out var species))
+        if (!_contentDb.Species.TryGetValue(boss.CreatureId, out var species))
             return;
 
-        var opponent = species.CreateInstance(_boss.Level);
+        var opponent = species.CreateInstance(boss.Level);
         _activeTrainerId = null;
         _activeBossBattle = true;
+        _activeBoss = boss;
         _wildEncounter = null;
         _battleScene = new BattleScene(
             activeJoyMon,
@@ -1073,7 +1109,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             new BattleRngAdapter(_rng),
             _profile,
             isBossBattle: true,
-            bossDisplayName: _boss.DisplayName);
+            bossDisplayName: boss.DisplayName);
 
         _player.State = MovementState.Idle;
         _player.TargetX = _player.X;
@@ -1114,8 +1150,10 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         var trainerId = _activeTrainerId;
         var wasTrainerBattle = trainerId is not null;
         var wasBossBattle = _activeBossBattle;
+        var boss = _activeBoss;
         _activeTrainerId = null;
         _activeBossBattle = false;
+        _activeBoss = null;
         _battleScene = null;
         _wildEncounter = null;
 
@@ -1126,12 +1164,17 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             _profile.RecordCapture(_lastWildSpeciesId);
         _lastWildSpeciesId = null;
 
-        if (wasBossBattle && _boss is not null && outcome == BattleSceneOutcome.Won)
+        if (wasBossBattle && boss is not null && outcome == BattleSceneOutcome.Won)
         {
-            BossInteraction.RecordVictory(_profile, _boss);
-            ShowEndingScreen();
+            BossInteraction.RecordVictory(_profile, boss);
+            if (boss.Id == "lanternox")
+            {
+                ShowEndingScreen();
+                AutosaveCurrentGame();
+                return;
+            }
+
             AutosaveCurrentGame();
-            return;
         }
 
         if (outcome == BattleSceneOutcome.Won && trainerId is not null && _trainers.TryGetValue(trainerId, out var trainer))
@@ -1577,6 +1620,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             JoyMonType.Ember => Color.OrangeRed,
             JoyMonType.Tide => Color.DeepSkyBlue,
             JoyMonType.Echo => Color.MediumPurple,
+            JoyMonType.Frost => Color.LightCyan,
             _ => Color.LightSteelBlue,
         };
     }

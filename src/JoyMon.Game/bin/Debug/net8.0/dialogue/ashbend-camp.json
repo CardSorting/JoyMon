@@ -1,100 +1,158 @@
 {
-    "npcs": [
-        {
-            "npcId": "healer",
-            "dialogs": [
-                {
-                    "id": "healer_greeting",
-                    "nextDialogId": null,
-                    "context": "default",
-                    "text": "Welcome to Ashbend Camp. If you're injured, just ask and we'll take care of you."
-                },
-                {
-                    "id": "healer_heal",
-                    "nextDialogId": null,
-                    "context": "heal",
-                    "text": "I've restored your creatures to full health."
-                }
-            ]
-        },
-        {
-            "npcId": "gambler",
-            "dialogs": [
-                {
-                    "id": "gambler_greeting",
-                    "nextDialogId": null,
-                    "context": "default",
-                    "text": "Care for a wager? Creatures battle for glory here in the Emberpass. 50 PokéCubes for a battle."
-                },
-                {
-                    "id": "gambler_challenge",
-                    "nextDialogId": null,
-                    "context": "challenge",
-                    "text": "Good luck. May the best creatures win."
-                }
-            ]
-        },
-        {
-            "npcId": "miner_1",
-            "dialogs": [
-                {
-                    "id": "miner_1_greeting",
-                    "nextDialogId": null,
-                    "context": "default",
-                    "text": "Watch your step. The old mine's unstable. We've sealed it off until we know it's safe."
-                }
-            ]
-        },
-        {
-            "npcId": "miner_2",
-            "dialogs": [
-                {
-                    "id": "miner_2_greeting",
-                    "nextDialogId": null,
-                    "context": "default",
-                    "text": "These Emberpass creatures are tougher than anything we've seen back in Riverside. Stay alert."
-                }
-            ]
-        },
-        {
-            "npcId": "villager",
-            "dialogs": [
-                {
-                    "id": "villager_greeting",
-                    "nextDialogId": null,
-                    "context": "default",
-                    "text": "Thank goodness you've made it. The Emberpass region is dangerous, but necessary for our survival."
-                },
-                {
-                    "id": "villager_advice",
-                    "nextDialogId": null,
-                    "context": "advice",
-                    "text": "If you encounter those sleeping creatures, they'll grow stronger. Don't wake them unless you're ready."
-                }
-            ]
-        },
-        {
-            "npcId": "elder",
-            "dialogs": [
-                {
-                    "id": "elder_greeting",
-                    "nextDialogId": null,
-                    "context": "default",
-                    "text": "Ah, a traveler from the west. We've heard stories about your battles at the Old Watermill."
-                },
-                {
-                    "id": "elder_quest",
-                    "nextDialogId": null,
-                    "context": "quest",
-                    "text": "The Emberpass mines hold ancient power. One day, we'll unlock them. Until then, we remain here, safe from the dangers outside."
-                },
-                {
-                    "id": "elder_tip",
-                    "nextDialogId": null,
-                    "context": "tip",
-                    "text": "The creatures here have adapted to the volcanic ash. Their Ember Type attacks are stronger when the air is smoky."
-                }
-            ]
-        }
-    ]
+  "npcs": [
+    {
+      "id": "ashbend-healer",
+      "name": "Ashbend Medic",
+      "mapId": "ashbend-camp",
+      "tilePosition": { "x": 7, "y": 9 },
+      "facingDirection": "right",
+      "dialogueId": "ashbend-healer-talk",
+      "spriteId": "operator"
+    },
+    {
+      "id": "ashbend-miner-1",
+      "name": "Mine Watch",
+      "mapId": "ashbend-camp",
+      "tilePosition": { "x": 5, "y": 3 },
+      "facingDirection": "down",
+      "dialogueId": "ashbend-miner-1-talk",
+      "spriteId": "guard"
+    },
+    {
+      "id": "ashbend-miner-2",
+      "name": "Ash Surveyor",
+      "mapId": "ashbend-camp",
+      "tilePosition": { "x": 14, "y": 6 },
+      "facingDirection": "left",
+      "dialogueId": "ashbend-miner-2-talk",
+      "spriteId": "operator"
+    },
+    {
+      "id": "ashbend-villager",
+      "name": "Camp Villager",
+      "mapId": "ashbend-camp",
+      "tilePosition": { "x": 17, "y": 9 },
+      "facingDirection": "left",
+      "dialogueId": "ashbend-villager-talk",
+      "spriteId": "kid"
+    },
+    {
+      "id": "ashbend-elder",
+      "name": "Ashbend Elder",
+      "mapId": "ashbend-camp",
+      "tilePosition": { "x": 12, "y": 3 },
+      "facingDirection": "down",
+      "dialogueId": "ashbend-elder-talk",
+      "spriteId": "dr-cedar"
+    },
+    {
+      "id": "ashbend-shortcut-sign",
+      "name": "Shortcut Marker",
+      "mapId": "ashbend-camp",
+      "tilePosition": { "x": 19, "y": 2 },
+      "facingDirection": "down",
+      "dialogueId": "ashbend-shortcut-sign-talk",
+      "spriteId": "sign"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "ashbend-healer-talk",
+      "speaker": "Ashbend Medic",
+      "lines": [
+        "The ash dries out wounds fast, but it leaves the body tired.",
+        "Rest here before you enter the mine.",
+        "Your party is healed and ready."
+      ]
+    },
+    {
+      "id": "ashbend-healer-talk-cleared",
+      "speaker": "Ashbend Medic",
+      "lines": [
+        "The air is easier to breathe since Cindralith settled.",
+        "I'll still patch up your party before you travel on."
+      ]
+    },
+    {
+      "id": "ashbend-miner-1-talk",
+      "speaker": "Mine Watch",
+      "lines": [
+        "Ashbend Mine is open, but the deep tunnel is shaking.",
+        "Something Ember and Stone is holding the shortcut closed."
+      ]
+    },
+    {
+      "id": "ashbend-miner-1-talk-cleared",
+      "speaker": "Mine Watch",
+      "lines": [
+        "The deep tunnel is stable again.",
+        "The shortcut near the east wall will take you through cleanly now."
+      ]
+    },
+    {
+      "id": "ashbend-miner-2-talk",
+      "speaker": "Ash Surveyor",
+      "lines": [
+        "Coalboar tracks lead into the old haulage route.",
+        "If the tunnel rumbles, step away from cracked stone."
+      ]
+    },
+    {
+      "id": "ashbend-miner-2-talk-cleared",
+      "speaker": "Ash Surveyor",
+      "lines": [
+        "Those cracks have gone quiet.",
+        "Cindralith must have been pressing against the whole mine."
+      ]
+    },
+    {
+      "id": "ashbend-villager-talk",
+      "speaker": "Camp Villager",
+      "lines": [
+        "We came east after the watermill started turning again.",
+        "Now the mine is the only thing between Emberpass and a safe road."
+      ]
+    },
+    {
+      "id": "ashbend-villager-talk-cleared",
+      "speaker": "Camp Villager",
+      "lines": [
+        "You cleared Ashbend Mine.",
+        "People are already packing supplies for the route beyond Emberpass."
+      ]
+    },
+    {
+      "id": "ashbend-elder-talk",
+      "speaker": "Ashbend Elder",
+      "lines": [
+        "Traveler from the west, you ended the watermill's silence.",
+        "Now Ashbend Mine asks the same courage.",
+        "Find Cindralith in the heart tunnel and calm the Emberpass."
+      ]
+    },
+    {
+      "id": "ashbend-elder-talk-cleared",
+      "speaker": "Ashbend Elder",
+      "lines": [
+        "The mine is clear, and Emberpass can breathe again.",
+        "Trial Grove, Old Watermill, and Ashbend Mine now stand behind you."
+      ]
+    },
+    {
+      "id": "ashbend-shortcut-sign-talk",
+      "speaker": "Shortcut Marker",
+      "lines": [
+        "Shortcut sealed by mine pressure.",
+        "Clear the heart tunnel before using this passage."
+      ]
+    },
+    {
+      "id": "ashbend-shortcut-sign-talk-cleared",
+      "speaker": "Shortcut Marker",
+      "lines": [
+        "Shortcut open.",
+        "East passage leads back through Ashbend Mine."
+      ]
+    }
+  ]
 }

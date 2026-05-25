@@ -1,0 +1,14 @@
+{
+  "id": "millox",
+  "name": "Millox",
+  "type": "Stone",
+  "secondaryType": "Tide",
+  "baseStats": {
+    "maxHp": 62,
+    "attack": 9,
+    "defense": 12,
+    "speed": 5
+  },
+  "starterEligible": false,
+  "learnset": ["pebble-toss", "guard-curl", "tackle"]
+}

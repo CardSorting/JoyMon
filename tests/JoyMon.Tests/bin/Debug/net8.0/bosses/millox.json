@@ -1,0 +1,16 @@
+{
+  "id": "millox",
+  "displayName": "Millox",
+  "mapId": "old-watermill",
+  "gateTile": { "x": 10, "y": 5 },
+  "level": 11,
+  "creatureId": "millox",
+  "clearedFlag": "old_watermill_cleared",
+  "introDialogue": {
+    "speaker": "Millox",
+    "lines": [
+      "The waterwheel groans to a halt...",
+      "Millox emerges from the flooded gear room!"
+    ]
+  }
+}

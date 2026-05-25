@@ -1,0 +1,14 @@
+{
+  "id": "smokowl",
+  "name": "Smokowl",
+  "type": "Ember",
+  "secondaryType": "Echo",
+  "baseStats": {
+    "maxHp": 48,
+    "attack": 11,
+    "defense": 6,
+    "speed": 12
+  },
+  "starterEligible": false,
+  "learnset": ["ember-nudge", "echo-chirp", "tackle"]
+}

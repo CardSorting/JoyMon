@@ -1,0 +1,14 @@
+{
+  "id": "cindralith",
+  "name": "Cindralith",
+  "type": "Ember",
+  "secondaryType": "Stone",
+  "baseStats": {
+    "maxHp": 86,
+    "attack": 15,
+    "defense": 17,
+    "speed": 7
+  },
+  "starterEligible": false,
+  "learnset": ["ember-nudge", "pebble-toss", "guard-curl", "tackle"]
+}

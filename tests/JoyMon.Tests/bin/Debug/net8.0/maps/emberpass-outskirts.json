@@ -99,7 +99,8 @@
             "toTile": {
                 "x": 6,
                 "y": 0
-            }
+            },
+            "oneWayReason": "Outskirts path feeds back through the bridge crossing gate."
         },
         {
             "fromMapId": "emberpass-outskirts",

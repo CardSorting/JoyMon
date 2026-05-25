@@ -1,0 +1,108 @@
+{
+  "id": "ashbend-mine",
+  "name": "Ashbend Mine",
+  "width": 16,
+  "height": 12,
+  "tileSize": 16,
+  "tilesetId": "overworld",
+  "spawnPoint": { "x": 1, "y": 10 },
+  "layers": {
+    "ground": [
+      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+      [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+    ],
+    "decoration": [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 3, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    "collision": [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ]
+  },
+  "triggers": [
+    {
+      "id": "minecart-switch-a",
+      "kind": "minecartSwitch",
+      "tile": { "x": 3, "y": 7 },
+      "setsFlag": "ashbend_minecart_switch_a",
+      "trackTiles": [
+        { "x": 7, "y": 7 },
+        { "x": 8, "y": 7 },
+        { "x": 9, "y": 7 }
+      ],
+      "message": "You lowered the minecart track!",
+      "alreadyMessage": "The track is already lowered.",
+      "blockedMessage": "The raised track blocks the tunnel."
+    },
+    {
+      "id": "collapsed-rocks",
+      "kind": "rockGate",
+      "tile": { "x": 6, "y": 4 },
+      "requiredFlag": "ashbend_mine_pass",
+      "rockTiles": [
+        { "x": 5, "y": 4 },
+        { "x": 6, "y": 4 },
+        { "x": 7, "y": 4 }
+      ],
+      "blockedMessage": "Collapsed rocks block the tunnel. The foreman can authorize passage."
+    },
+    {
+      "id": "lantern-west",
+      "kind": "lantern",
+      "tile": { "x": 2, "y": 5 },
+      "message": "Lantern checkpoint: west haulage route is marked safe."
+    },
+    {
+      "id": "lantern-east",
+      "kind": "lantern",
+      "tile": { "x": 11, "y": 5 },
+      "message": "Lantern checkpoint: east shaft air is thin but passable."
+    }
+  ],
+  "transitions": [
+    {
+      "fromMapId": "ashbend-mine",
+      "fromTile": { "x": 0, "y": 10 },
+      "toMapId": "ashbend-camp",
+      "toTile": { "x": 4, "y": 2 }
+    },
+    {
+      "fromMapId": "ashbend-mine",
+      "fromTile": { "x": 15, "y": 1 },
+      "toMapId": "ashbend-camp",
+      "toTile": { "x": 20, "y": 2 },
+      "requiredFlag": "ashbend_mine_cleared"
+    }
+  ]
+}

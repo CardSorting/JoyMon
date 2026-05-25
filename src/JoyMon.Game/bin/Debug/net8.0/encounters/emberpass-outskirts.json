@@ -1,69 +1,33 @@
 {
-    "id": "emberpass-outskirts",
-    "name": "Emberpass Outskirts",
-    "groups": [
-        {
-            "name": "outskirts_ash",
-            "encounters": [
-                {
-                    "targetCandidates": [
-                        {
-                            "speciesId": "ashkit",
-                            "levelMin": 11,
-                            "levelMax": 13
-                        }
-                    ],
-                    "repeats": 3
-                }
-            ],
-            "trigger": "walk_overworld"
-        },
-        {
-            "name": "outskirts_rocky",
-            "encounters": [
-                {
-                    "targetCandidates": [
-                        {
-                            "speciesId": "coalboar",
-                            "levelMin": 12,
-                            "levelMax": 14
-                        }
-                    ],
-                    "repeats": 3
-                }
-            ],
-            "trigger": "walk_overworld"
-        },
-        {
-            "name": "outskirts_common",
-            "encounters": [
-                {
-                    "targetCandidates": [
-                        {
-                            "speciesId": "cindermite",
-                            "levelMin": 10,
-                            "levelMax": 12
-                        },
-                        {
-                            "speciesId": "pebblit",
-                            "levelMin": 10,
-                            "levelMax": 12
-                        },
-                        {
-                            "speciesId": "ashkit",
-                            "levelMin": 11,
-                            "levelMax": 13
-                        },
-                        {
-                            "speciesId": "coalboar",
-                            "levelMin": 12,
-                            "levelMax": 14
-                        }
-                    ],
-                    "repeats": 3
-                }
-            ],
-            "trigger": "walk_overworld"
-        }
-    ]
+  "id": "emberpass-outskirts-encounters",
+  "mapId": "emberpass-outskirts",
+  "zoneId": "ash",
+  "tileIds": [1, 2],
+  "encounterRate": 0.12,
+  "entries": [
+    {
+      "creatureId": "cindermite",
+      "minLevel": 10,
+      "maxLevel": 12,
+      "weight": 30
+    },
+    {
+      "creatureId": "pebblit",
+      "minLevel": 10,
+      "maxLevel": 12,
+      "weight": 25
+    },
+    {
+      "creatureId": "ashkit",
+      "minLevel": 11,
+      "maxLevel": 13,
+      "weight": 25
+    },
+    {
+      "creatureId": "coalboar",
+      "minLevel": 12,
+      "maxLevel": 14,
+      "weight": 20
+    }
+  ]
 }
