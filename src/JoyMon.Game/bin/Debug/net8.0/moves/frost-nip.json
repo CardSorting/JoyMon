@@ -1,0 +1,10 @@
+{
+  "id": "frost-nip",
+  "name": "Frost Nip",
+  "type": "Frost",
+  "power": 9,
+  "accuracy": 95,
+  "maxUses": 20,
+  "effect": "chill",
+  "effectChance": 20
+}

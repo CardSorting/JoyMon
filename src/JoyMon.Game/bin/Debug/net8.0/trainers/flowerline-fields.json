@@ -1,0 +1,103 @@
+{
+  "trainers": [
+    {
+      "id": "fields-keeper-sera",
+      "displayName": "Pollen Keeper Sera",
+      "mapId": "flowerline-fields",
+      "tilePosition": { "x": 5, "y": 7 },
+      "sightRange": 0,
+      "facingDirection": "down",
+      "spriteId": "operator",
+      "dialogueBefore": {
+        "speaker": "Sera",
+        "lines": [
+          "The pollen wind is strong today!",
+          "Let's see if you have the strength to push past my team!"
+        ]
+      },
+      "dialogueAfter": {
+        "speaker": "Sera",
+        "lines": [
+          "Incredible! Your team handles the winds beautifully.",
+          "Go ahead into the pollen maze."
+        ]
+      },
+      "party": [
+        {
+          "creatureId": "pollibun",
+          "level": 23
+        },
+        {
+          "creatureId": "queuebee",
+          "level": 23
+        }
+      ]
+    },
+    {
+      "id": "fields-railhand-tiko",
+      "displayName": "Railhand Tiko",
+      "mapId": "flowerline-fields",
+      "tilePosition": { "x": 11, "y": 10 },
+      "sightRange": 0,
+      "facingDirection": "down",
+      "spriteId": "kid",
+      "dialogueBefore": {
+        "speaker": "Tiko",
+        "lines": [
+          "Careful around the tracks! My Railmouse runs this line.",
+          "Show me what your JoyMon can do!"
+        ]
+      },
+      "dialogueAfter": {
+        "speaker": "Tiko",
+        "lines": [
+          "Wow, your JoyMon are lightning fast!",
+          "You're definitely ready for the rails."
+        ]
+      },
+      "party": [
+        {
+          "creatureId": "railmouse",
+          "level": 24
+        },
+        {
+          "creatureId": "staticrow",
+          "level": 23
+        }
+      ]
+    },
+    {
+      "id": "fields-chef-loma",
+      "displayName": "Meadow Chef Loma",
+      "mapId": "flowerline-fields",
+      "tilePosition": { "x": 15, "y": 7 },
+      "sightRange": 0,
+      "facingDirection": "down",
+      "spriteId": "dr-cedar",
+      "dialogueBefore": {
+        "speaker": "Loma",
+        "lines": [
+          "Fresh meadow herbs make the best dishes!",
+          "Let me cook up a hot battle for you!"
+        ]
+      },
+      "dialogueAfter": {
+        "speaker": "Loma",
+        "lines": [
+          "A master class! That was a delicious battle.",
+          "Safe travels through the rest of the fields."
+        ]
+      },
+      "party": [
+        {
+          "creatureId": "chilleaf",
+          "level": 23
+        },
+        {
+          "creatureId": "drizzleaf",
+          "level": 24
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "conducthorn",
+  "name": "Conducthorn",
+  "type": "Spark",
+  "secondaryType": "Stone",
+  "baseStats": {
+    "maxHp": 70,
+    "attack": 14,
+    "defense": 12,
+    "speed": 10
+  },
+  "starterEligible": false,
+  "learnset": ["spark-peck", "pebble-toss", "guard-curl", "tackle"]
+}

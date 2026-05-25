@@ -35,7 +35,7 @@ public class ContentPolishTests
             var trainerLoader = new TrainerLoader(trainersDirectory);
             var validMoveIds = database.Moves.Keys.ToHashSet();
             foreach (var file in Directory.EnumerateFiles(trainersDirectory, "*.json"))
-                trainerLoader.Load(Path.GetFileName(file), validCreatureIds, validMoveIds);
+                trainerLoader.LoadAll(Path.GetFileName(file), validCreatureIds, validMoveIds);
         }
 
         if (Directory.Exists(bossesDirectory))
@@ -69,11 +69,12 @@ public class ContentPolishTests
         foreach (var file in Directory.EnumerateFiles(Path.Combine(ContentRoot, "encounters"), "*.json"))
         {
             var table = loader.Load(Path.GetFileName(file), validCreatureIds);
+            var levelCap = table.MapId == "abandoned-train" ? 27 : (table.MapId == "flowerline-fields" ? 24 : (table.MapId == "snowbell-shrine" ? 21 : 19));
             foreach (var entry in table.Entries)
             {
                 Assert.True(entry.MinLevel > 0, $"{table.Id}:{entry.CreatureId} minLevel must be positive.");
                 Assert.True(entry.MaxLevel >= entry.MinLevel, $"{table.Id}:{entry.CreatureId} maxLevel must be >= minLevel.");
-                Assert.True(entry.MaxLevel <= 19, $"{table.Id}:{entry.CreatureId} is above the current region balance cap.");
+                Assert.True(entry.MaxLevel <= levelCap, $"{table.Id}:{entry.CreatureId} is above the current region balance cap.");
             }
         }
     }

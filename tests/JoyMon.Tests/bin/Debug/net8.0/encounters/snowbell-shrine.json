@@ -1,0 +1,33 @@
+{
+  "id": "snowbell-shrine-encounters",
+  "mapId": "snowbell-shrine",
+  "zoneId": "shrine-halls",
+  "tileIds": [5, 9],
+  "encounterRate": 0.14,
+  "entries": [
+    {
+      "creatureId": "snobble",
+      "minLevel": 18,
+      "maxLevel": 20,
+      "weight": 25
+    },
+    {
+      "creatureId": "bellcub",
+      "minLevel": 19,
+      "maxLevel": 21,
+      "weight": 25
+    },
+    {
+      "creatureId": "frostmoth",
+      "minLevel": 20,
+      "maxLevel": 21,
+      "weight": 20
+    },
+    {
+      "creatureId": "chilleaf",
+      "minLevel": 19,
+      "maxLevel": 20,
+      "weight": 30
+    }
+  ]
+}

@@ -35,6 +35,12 @@ public class TrainerContent
     public List<TrainerPartyMemberContent> Party { get; init; } = new();
 }
 
+public class TrainerFileContent
+{
+    [JsonPropertyName("trainers")]
+    public List<TrainerContent> Trainers { get; init; } = new();
+}
+
 public class TrainerTilePositionContent
 {
     [JsonPropertyName("x")]

@@ -1,0 +1,103 @@
+{
+  "trainers": [
+    {
+      "id": "lodge-runner-mina",
+      "displayName": "Lodge Runner Mina",
+      "mapId": "frostveil-path",
+      "tilePosition": { "x": 8, "y": 11 },
+      "sightRange": 0,
+      "facingDirection": "down",
+      "spriteId": "operator",
+      "dialogueBefore": {
+        "speaker": "Mina",
+        "lines": [
+          "Snowbell keeps its trails honest.",
+          "Show me your footing before you climb higher!"
+        ]
+      },
+      "dialogueAfter": {
+        "speaker": "Mina",
+        "lines": [
+          "Clean steps through rough snow.",
+          "The shrine keeper will want to hear about that."
+        ]
+      },
+      "party": [
+        {
+          "creatureId": "snobble",
+          "level": 18
+        },
+        {
+          "creatureId": "chilleaf",
+          "level": 18
+        }
+      ]
+    },
+    {
+      "id": "static-skater-orro",
+      "displayName": "Static Skater Orro",
+      "mapId": "frostveil-path",
+      "tilePosition": { "x": 13, "y": 5 },
+      "sightRange": 0,
+      "facingDirection": "left",
+      "spriteId": "kid",
+      "dialogueBefore": {
+        "speaker": "Orro",
+        "lines": [
+          "Ice turns every battle into a slide.",
+          "Try to keep up!"
+        ]
+      },
+      "dialogueAfter": {
+        "speaker": "Orro",
+        "lines": [
+          "You held the line better than I did.",
+          "That should count toward shrine clearance."
+        ]
+      },
+      "party": [
+        {
+          "creatureId": "staticrow",
+          "level": 18
+        },
+        {
+          "creatureId": "ashkit",
+          "level": 17
+        }
+      ]
+    },
+    {
+      "id": "moss-hermit-pela",
+      "displayName": "Moss Hermit Pela",
+      "mapId": "frostveil-path",
+      "tilePosition": { "x": 15, "y": 3 },
+      "sightRange": 0,
+      "facingDirection": "down",
+      "spriteId": "dr-cedar",
+      "dialogueBefore": {
+        "speaker": "Pela",
+        "lines": [
+          "Green things sleep under this frost.",
+          "Wake them gently, or they will wake you first."
+        ]
+      },
+      "dialogueAfter": {
+        "speaker": "Pela",
+        "lines": [
+          "You listen to the snow and the moss.",
+          "The shrine path may listen back."
+        ]
+      },
+      "party": [
+        {
+          "creatureId": "chilleaf",
+          "level": 19
+        },
+        {
+          "creatureId": "drizzleaf",
+          "level": 18
+        }
+      ]
+    }
+  ]
+}

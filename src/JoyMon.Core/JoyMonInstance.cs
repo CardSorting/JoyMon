@@ -12,14 +12,21 @@ public class JoyMonInstance
     public int MaxHp { get; private set; }
     public int Attack { get; private set; }
     public int Defense { get; private set; }
-    public int Speed { get; private set; }
+    private int _speed;
+    public int Speed
+    {
+        get => ChillTurnsRemaining > 0 ? (int)(_speed * 0.75) : _speed;
+        private set => _speed = value;
+    }
     public int Xp { get; set; }
     public int[] RemainingUses { get; }
     public int BurnTurnsRemaining { get; set; }
+    public int ChillTurnsRemaining { get; set; }
     public bool IsGuarding { get; set; }
 
     public string? BattleStatusLabel =>
         BurnTurnsRemaining > 0 ? "BRN" :
+        ChillTurnsRemaining > 0 ? "CHL" :
         IsGuarding ? "GRD" : null;
 
     public JoyMonInstance(

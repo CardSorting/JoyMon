@@ -134,6 +134,7 @@ public class MapLoader
             ValidateLayer(map.Layers?.Ground, "ground", map.Width, map.Height, filename, validation);
             ValidateLayer(map.Layers?.Decoration, "decoration", map.Width, map.Height, filename, validation);
             ValidateLayer(map.Layers?.Collision, "collision", map.Width, map.Height, filename, validation);
+            ValidateMovementEffectLayer(map.Layers?.MovementEffect, map.Width, map.Height, filename, validation);
         }
 
         // Collision values must be 0 or 1
@@ -195,6 +196,45 @@ public class MapLoader
                     && (tile.X < 0 || tile.X >= map.Width || tile.Y < 0 || tile.Y >= map.Height))
                 {
                     validation.AddError($"Map '{filename}' trigger '{trigger.Id}' references out-of-bounds tile ({tile.X},{tile.Y})");
+                }
+            }
+        }
+    }
+
+    private static void ValidateMovementEffectLayer(
+        List<List<string>>? layer,
+        int w,
+        int h,
+        string filename,
+        ContentValidationResult validation)
+    {
+        if (layer is null)
+            return;
+
+        if (layer.Count != h)
+        {
+            validation.AddError($"Map '{filename}' layer 'movementEffect' has {layer.Count} rows but height is {h}");
+            return;
+        }
+
+        for (int y = 0; y < layer.Count; y++)
+        {
+            var row = layer[y];
+            if (row is null)
+            {
+                validation.AddError($"Map '{filename}' layer 'movementEffect' row {y} is null");
+                continue;
+            }
+
+            if (row.Count != w)
+                validation.AddError($"Map '{filename}' layer 'movementEffect' row {y} has {row.Count} columns but width is {w}");
+
+            for (int x = 0; x < row.Count && x < w; x++)
+            {
+                if (!MovementEffect.IsValid(row[x]))
+                {
+                    validation.AddError(
+                        $"Map '{filename}' movementEffect at ({x},{y}) has invalid value '{row[x]}'; must be 'normal', 'ice', or 'pollen_wind_<direction>'");
                 }
             }
         }

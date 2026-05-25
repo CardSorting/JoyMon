@@ -1,0 +1,14 @@
+{
+  "id": "bellcub",
+  "name": "Bellcub",
+  "type": "Echo",
+  "secondaryType": "Frost",
+  "baseStats": {
+    "maxHp": 56,
+    "attack": 9,
+    "defense": 10,
+    "speed": 8
+  },
+  "starterEligible": false,
+  "learnset": ["echo-chirp", "guard-curl", "tackle"]
+}

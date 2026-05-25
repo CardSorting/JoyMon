@@ -96,4 +96,8 @@ public class MapLayersContent
     /// <summary>Walkability mask (0 = passable, 1 = blocked).</summary>
     [JsonPropertyName("collision")]
     public List<List<int>> Collision { get; init; } = new();
+
+    /// <summary>Per-tile movement effect ("normal" or "ice"). Optional; defaults to normal.</summary>
+    [JsonPropertyName("movementEffect")]
+    public List<List<string>>? MovementEffect { get; init; }
 }

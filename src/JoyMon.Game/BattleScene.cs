@@ -365,6 +365,7 @@ public sealed class BattleScene
         {
             BattleStatus.Burn => "burned",
             BattleStatus.Guard => "guarding",
+            BattleStatus.Chill => "chilled",
             _ => "affected",
         };
 
@@ -373,6 +374,7 @@ public sealed class BattleScene
         {
             BattleStatus.Burn => "burned",
             BattleStatus.Guard => "guarding",
+            BattleStatus.Chill => "chilled",
             _ => statusName.ToLowerInvariant(),
         };
 

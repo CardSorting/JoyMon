@@ -39,4 +39,12 @@ public class MapTriggerContent
 
     [JsonPropertyName("blockedMessage")]
     public string? BlockedMessage { get; init; }
+
+    /// <summary>All flags that must be set before <see cref="PatternSolvedFlag"/> is raised (bell puzzles).</summary>
+    [JsonPropertyName("patternFlags")]
+    public List<string> PatternFlags { get; init; } = new();
+
+    /// <summary>Flag set when every entry in <see cref="PatternFlags"/> is true.</summary>
+    [JsonPropertyName("patternSolvedFlag")]
+    public string? PatternSolvedFlag { get; init; }
 }

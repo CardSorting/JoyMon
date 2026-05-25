@@ -36,4 +36,5 @@ public class MoveDefinition
 
     public bool AppliesGuard => Effect == MoveEffects.Guard;
     public bool CanInflictBurn => Effect == MoveEffects.Burn;
+    public bool CanInflictChill => Effect == MoveEffects.Chill;
 }

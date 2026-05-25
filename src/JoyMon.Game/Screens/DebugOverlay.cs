@@ -36,7 +36,16 @@ public sealed class DebugOverlay
         }
     }
 
-    public void Draw(SpriteBatch spriteBatch, GameState currentState, int renderScale, string mapId, int playerX, int playerY, string facing)
+    public void Draw(
+        SpriteBatch spriteBatch,
+        GameState currentState,
+        int renderScale,
+        string mapId,
+        int playerX,
+        int playerY,
+        string facing,
+        bool isSliding = false,
+        string currentMovementEffect = "normal")
     {
         if (!_visible)
             return;
@@ -51,6 +60,8 @@ public sealed class DebugOverlay
             DrawLine(spriteBatch, $"Map:   {mapId}", ref y, Color.Yellow);
             DrawLine(spriteBatch, $"Tile:  ({playerX},{playerY})", ref y, Color.Yellow);
             DrawLine(spriteBatch, $"Face:  {facing}", ref y, Color.Yellow);
+            DrawLine(spriteBatch, $"IsSliding: {isSliding}", ref y, Color.Yellow);
+            DrawLine(spriteBatch, $"CurrentMovementEffect: {currentMovementEffect}", ref y, Color.Yellow);
         }
     }
 

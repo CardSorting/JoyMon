@@ -1,0 +1,17 @@
+{
+  "id": "auroraw",
+  "displayName": "Auroraw",
+  "mapId": "snowbell-shrine",
+  "gateTile": { "x": 11, "y": 3 },
+  "level": 22,
+  "creatureId": "auroraw",
+  "clearedFlag": "snowbell_shrine_cleared",
+  "introDialogue": {
+    "speaker": "Auroraw",
+    "lines": [
+      "A chilling gale sweeps through the chamber!",
+      "A brilliant light shines from the frost arches...",
+      "Auroraw descends from the heavens!"
+    ]
+  }
+}

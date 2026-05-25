@@ -71,6 +71,38 @@ public class TrainerLoaderTests : IDisposable
     }
 
     [Fact]
+    public void TrainerGroup_LoadsAllTrainers()
+    {
+        WriteTrainer("group.json", new
+        {
+            trainers = new[]
+            {
+                ValidTrainer(),
+                new
+                {
+                    id = "route-1-bug-catcher",
+                    displayName = "Lio",
+                    mapId = "route-1",
+                    tilePosition = new { x = 10, y = 8 },
+                    sightRange = 0,
+                    facingDirection = "right",
+                    spriteId = "kid",
+                    dialogueBefore = new { speaker = "Lio", lines = new[] { "Ready?" } },
+                    dialogueAfter = new { speaker = "Lio", lines = new[] { "Nice!" } },
+                    party = new[] { new { creatureId = "rootsnail", level = 5 } }
+                }
+            }
+        });
+        var loader = CreateLoader();
+
+        var trainers = loader.LoadAll("group.json", _validCreatures, _validMoves);
+
+        Assert.Equal(2, trainers.Count);
+        Assert.Contains(trainers, trainer => trainer.Id == "route-1-rival");
+        Assert.Contains(trainers, trainer => trainer.Id == "route-1-bug-catcher");
+    }
+
+    [Fact]
     public void InvalidCreatureReference_FailsValidation()
     {
         WriteTrainer("invalid_creature.json", new

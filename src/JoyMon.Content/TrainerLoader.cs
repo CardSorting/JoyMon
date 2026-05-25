@@ -20,14 +20,23 @@ public class TrainerLoader
 
     public TrainerContent Load(string filename, IReadOnlySet<string> validCreatureIds, IReadOnlySet<string> validMoveIds)
     {
+        var trainers = LoadAll(filename, validCreatureIds, validMoveIds).ToList();
+        if (trainers.Count != 1)
+            throw new InvalidContentException($"Trainer file '{filename}' must contain exactly one trainer for Load(). Found {trainers.Count}.");
+
+        return trainers[0];
+    }
+
+    public IReadOnlyList<TrainerContent> LoadAll(string filename, IReadOnlySet<string> validCreatureIds, IReadOnlySet<string> validMoveIds)
+    {
         var validation = new ContentValidationResult();
         var path = Path.Combine(_trainersDirectory, filename);
 
-        TrainerContent? trainer;
+        List<TrainerContent>? trainers;
         try
         {
             var json = File.ReadAllText(path);
-            trainer = JsonSerializer.Deserialize<TrainerContent>(json, JsonOptions);
+            trainers = DeserializeTrainers(json);
         }
         catch (JsonException ex)
         {
@@ -38,13 +47,38 @@ public class TrainerLoader
             throw new InvalidContentException($"Could not read trainer file '{filename}': {ex.Message}", ex);
         }
 
-        if (trainer is null)
+        if (trainers is null)
             throw new InvalidContentException($"Trainer file '{filename}' deserialized to null.");
 
-        Validate(trainer, filename, validCreatureIds, validMoveIds, validation);
+        if (trainers.Count == 0)
+            validation.AddError($"Trainer file '{filename}' has no trainers.");
+
+        var seenIds = new HashSet<string>();
+        foreach (var trainer in trainers)
+        {
+            Validate(trainer, filename, validCreatureIds, validMoveIds, validation);
+            if (!string.IsNullOrWhiteSpace(trainer.Id) && !seenIds.Add(trainer.Id))
+                validation.AddError($"Trainer file '{filename}' contains duplicate trainer ID '{trainer.Id}'");
+        }
+
         validation.ThrowIfInvalid();
 
-        return trainer;
+        return trainers;
+    }
+
+    private static List<TrainerContent>? DeserializeTrainers(string json)
+    {
+        using var document = JsonDocument.Parse(json);
+        var root = document.RootElement;
+
+        if (root.ValueKind == JsonValueKind.Array)
+            return JsonSerializer.Deserialize<List<TrainerContent>>(json, JsonOptions);
+
+        if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("trainers", out _))
+            return JsonSerializer.Deserialize<TrainerFileContent>(json, JsonOptions)?.Trainers;
+
+        var trainer = JsonSerializer.Deserialize<TrainerContent>(json, JsonOptions);
+        return trainer is null ? null : new List<TrainerContent> { trainer };
     }
 
     public static void Validate(

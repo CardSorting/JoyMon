@@ -1,0 +1,14 @@
+{
+  "id": "frostmoth",
+  "name": "Frostmoth",
+  "type": "Frost",
+  "secondaryType": null,
+  "baseStats": {
+    "maxHp": 48,
+    "attack": 7,
+    "defense": 8,
+    "speed": 14
+  },
+  "starterEligible": false,
+  "learnset": ["echo-chirp", "moss-tap", "tackle"]
+}

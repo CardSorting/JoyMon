@@ -1,0 +1,17 @@
+{
+  "id": "conducthorn",
+  "displayName": "Conducthorn",
+  "mapId": "abandoned-train",
+  "gateTile": { "x": 10, "y": 63 },
+  "level": 28,
+  "creatureId": "conducthorn",
+  "clearedFlag": "abandoned_train_cleared",
+  "introDialogue": {
+    "speaker": "Conducthorn",
+    "lines": [
+      "An earsplitting horn blast echoes from the boilers!",
+      "The engine fires roar to life!",
+      "Conducthorn blocks the controls!"
+    ]
+  }
+}

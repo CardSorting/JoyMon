@@ -1,0 +1,33 @@
+{
+  "id": "abandoned-train-encounters",
+  "mapId": "abandoned-train",
+  "zoneId": "train-carriages",
+  "tileIds": [2],
+  "encounterRate": 0.12,
+  "entries": [
+    {
+      "creatureId": "railmouse",
+      "minLevel": 24,
+      "maxLevel": 26,
+      "weight": 30
+    },
+    {
+      "creatureId": "cargolem",
+      "minLevel": 25,
+      "maxLevel": 27,
+      "weight": 30
+    },
+    {
+      "creatureId": "whistowl",
+      "minLevel": 26,
+      "maxLevel": 26,
+      "weight": 20
+    },
+    {
+      "creatureId": "staticrow",
+      "minLevel": 24,
+      "maxLevel": 26,
+      "weight": 20
+    }
+  ]
+}

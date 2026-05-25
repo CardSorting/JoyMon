@@ -1,0 +1,14 @@
+{
+  "id": "auroraw",
+  "name": "Auroraw",
+  "type": "Frost",
+  "secondaryType": "Echo",
+  "baseStats": {
+    "maxHp": 72,
+    "attack": 12,
+    "defense": 12,
+    "speed": 15
+  },
+  "starterEligible": false,
+  "learnset": ["echo-chirp", "guard-curl", "frost-nip", "tackle"]
+}

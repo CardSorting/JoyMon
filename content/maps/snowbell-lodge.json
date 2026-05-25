@@ -14,7 +14,7 @@
       [3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3],
       [3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3],
       [3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3],
-      [1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3],
+      [1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
       [3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3],
       [3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3],
       [3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3],
@@ -42,7 +42,7 @@
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -50,12 +50,46 @@
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ]
   },
+  "triggers": [
+    {
+      "id": "snowbell-shrine-entrance",
+      "kind": "lockedDoor",
+      "tile": { "x": 15, "y": 1 },
+      "requiredFlag": "frostveil_shrine_unlocked",
+      "doorTiles": [
+        { "x": 15, "y": 1 }
+      ],
+      "message": "The shrine entrance stands open. Cold air rolls from the steps beyond.",
+      "blockedMessage": "The Lodge Keeper holds the shrine sealed until two Frostveil trainers have vouched for you."
+    }
+  ],
   "transitions": [
+    {
+      "fromMapId": "snowbell-lodge",
+      "fromTile": { "x": 15, "y": 1 },
+      "toMapId": "snowbell-shrine",
+      "toTile": { "x": 11, "y": 16 },
+      "requiredFlag": "frostveil_shrine_unlocked"
+    },
     {
       "fromMapId": "snowbell-lodge",
       "fromTile": { "x": 0, "y": 6 },
       "toMapId": "frostveil-path",
       "toTile": { "x": 18, "y": 2 }
+    },
+    {
+      "fromMapId": "snowbell-lodge",
+      "fromTile": { "x": 14, "y": 1 },
+      "toMapId": "snowbell-shrine",
+      "toTile": { "x": 11, "y": 3 },
+      "requiredFlag": "snowbell_shrine_cleared"
+    },
+    {
+      "fromMapId": "snowbell-lodge",
+      "fromTile": { "x": 17, "y": 6 },
+      "toMapId": "mountain-descent",
+      "toTile": { "x": 0, "y": 6 },
+      "requiredFlag": "snowbell_shrine_cleared"
     }
   ]
 }

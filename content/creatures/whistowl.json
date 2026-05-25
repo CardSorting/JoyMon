@@ -1,0 +1,14 @@
+{
+  "id": "whistowl",
+  "name": "Whistowl",
+  "type": "Echo",
+  "secondaryType": "Spark",
+  "baseStats": {
+    "maxHp": 50,
+    "attack": 9,
+    "defense": 8,
+    "speed": 13
+  },
+  "starterEligible": false,
+  "learnset": ["echo-chirp", "spark-peck", "tackle"]
+}

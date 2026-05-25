@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JoyMon.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3b414577a4fb86a053ba19315e74a225f968070e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+65303686731c8ccaf8cd4994b9350dab68b11126")]
 [assembly: System.Reflection.AssemblyProductAttribute("JoyMon.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JoyMon.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

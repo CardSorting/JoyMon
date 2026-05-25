@@ -1,24 +1,6 @@
 {
   "npcs": [
     {
-      "id": "frostveil-trainer-1",
-      "name": "Snowline Trainer",
-      "mapId": "frostveil-path",
-      "tilePosition": { "x": 8, "y": 8 },
-      "facingDirection": "down",
-      "dialogueId": "frostveil-trainer-1-talk",
-      "spriteId": "operator"
-    },
-    {
-      "id": "frostveil-trainer-2",
-      "name": "Ice Patch Trainer",
-      "mapId": "frostveil-path",
-      "tilePosition": { "x": 13, "y": 5 },
-      "facingDirection": "left",
-      "dialogueId": "frostveil-trainer-2-talk",
-      "spriteId": "kid"
-    },
-    {
       "id": "snowbell-healer",
       "name": "Lodge Medic",
       "mapId": "snowbell-lodge",
@@ -53,34 +35,9 @@
       "facingDirection": "up",
       "dialogueId": "snowbell-guest-talk",
       "spriteId": "kid"
-    },
-    {
-      "id": "snowbell-shrine-gate",
-      "name": "Shrine Entrance",
-      "mapId": "snowbell-lodge",
-      "tilePosition": { "x": 15, "y": 1 },
-      "facingDirection": "down",
-      "dialogueId": "snowbell-shrine-gate-talk",
-      "spriteId": "sign"
     }
   ],
   "dialogues": [
-    {
-      "id": "frostveil-trainer-1-talk",
-      "speaker": "Snowline Trainer",
-      "lines": [
-        "The snow grass ahead hides Frost-type JoyMon.",
-        "I'll battle you once the lodge posts the route permits."
-      ]
-    },
-    {
-      "id": "frostveil-trainer-2-talk",
-      "speaker": "Ice Patch Trainer",
-      "lines": [
-        "These ice patches look harmless until you lose your footing.",
-        "Come back later and I'll test your balance in battle."
-      ]
-    },
     {
       "id": "snowbell-healer-talk",
       "speaker": "Lodge Medic",
@@ -90,11 +47,35 @@
       ]
     },
     {
+      "id": "snowbell-healer-talk-cleared",
+      "speaker": "Lodge Medic",
+      "lines": [
+        "The mountain winds are calmer since the shrine cleared.",
+        "Rest up here. Your JoyMon are fully healed."
+      ]
+    },
+    {
       "id": "snowbell-keeper-talk",
       "speaker": "Lodge Keeper",
       "lines": [
         "Welcome to Snowbell Lodge.",
-        "The mountain lift is running again, so travelers from Ashbend can finally reach us."
+        "The shrine path stays sealed until you have proven yourself against two Frostveil trainers."
+      ]
+    },
+    {
+      "id": "snowbell-keeper-talk-unlocked",
+      "speaker": "Lodge Keeper",
+      "lines": [
+        "Mina, Orro, and Pela all know the path. Two of them have vouched for you.",
+        "The shrine entrance is open. Step carefully."
+      ]
+    },
+    {
+      "id": "snowbell-keeper-talk-cleared",
+      "speaker": "Lodge Keeper",
+      "lines": [
+        "You calmed the guardian of Snowbell Shrine!",
+        "The Frostveil region owes you its peace, young traveler."
       ]
     },
     {
@@ -106,6 +87,14 @@
       ]
     },
     {
+      "id": "snowbell-scout-talk-cleared",
+      "speaker": "Ridge Scout",
+      "lines": [
+        "The shortcut at the top of the mountain has opened.",
+        "No more freezing puzzles just to get through the shrine!"
+      ]
+    },
+    {
       "id": "snowbell-guest-talk",
       "speaker": "Snowbound Guest",
       "lines": [
@@ -114,11 +103,11 @@
       ]
     },
     {
-      "id": "snowbell-shrine-gate-talk",
-      "speaker": "Shrine Entrance",
+      "id": "snowbell-guest-talk-cleared",
+      "speaker": "Snowbound Guest",
       "lines": [
-        "The shrine path is sealed by packed snow and old ice.",
-        "A formal expedition will be needed before anyone goes farther."
+        "I can hear a gentle melody from the shrine now.",
+        "The wild JoyMon seem much calmer since the boss was defeated."
       ]
     }
   ]

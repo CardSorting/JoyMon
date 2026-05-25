@@ -1,5 +1,7 @@
 using JoyMon.Content;
 using JoyMon.Core;
+using JoyMon.Game;
+using JoyMon.Game.Services;
 
 namespace JoyMon.Tests;
 
@@ -56,6 +58,94 @@ public class FrostveilFoundationTests
         Assert.Contains(table.Entries, e => e.CreatureId == "chilleaf" && e.MinLevel == 17 && e.MaxLevel == 19);
         Assert.Contains(table.Entries, e => e.CreatureId == "staticrow" && e.MinLevel == 16 && e.MaxLevel == 18);
         Assert.Contains(table.Entries, e => e.CreatureId == "rootsnail" && e.MinLevel == 17 && e.MaxLevel == 18);
+    }
+
+    [Fact]
+    public void FrostveilPathTrainers_ValidateSuccessfully()
+    {
+        var database = new ContentLoader(ContentRoot).Load();
+        var trainers = new TrainerLoader(Path.Combine(ContentRoot, "trainers"))
+            .LoadAll("frostveil-path.json", database.Species.Keys.ToHashSet(), database.Moves.Keys.ToHashSet());
+        var map = new MapLoader(Path.Combine(ContentRoot, "maps")).Load("frostveil-path.json");
+        var profile = new PlayerProfile();
+
+        Assert.Equal(3, trainers.Count);
+        Assert.All(trainers, trainer =>
+        {
+            Assert.Equal("frostveil-path", trainer.MapId);
+            Assert.True(
+                MapInteractionService.IsTileWalkable(map, profile, trainer.TilePosition.X, trainer.TilePosition.Y),
+                $"{trainer.Id} should be placed on a walkable Frostveil Path tile.");
+        });
+        Assert.Contains(trainers, t => t.Id == "lodge-runner-mina"
+            && t.DisplayName == "Lodge Runner Mina"
+            && t.Party.Any(p => p.CreatureId == "snobble" && p.Level == 18)
+            && t.Party.Any(p => p.CreatureId == "chilleaf" && p.Level == 18));
+        Assert.Contains(trainers, t => t.Id == "static-skater-orro"
+            && t.Party.Any(p => p.CreatureId == "staticrow" && p.Level == 18)
+            && t.Party.Any(p => p.CreatureId == "ashkit" && p.Level == 17));
+        Assert.Contains(trainers, t => t.Id == "moss-hermit-pela"
+            && t.Party.Any(p => p.CreatureId == "chilleaf" && p.Level == 19)
+            && t.Party.Any(p => p.CreatureId == "drizzleaf" && p.Level == 18));
+    }
+
+    [Fact]
+    public void FrostveilTrainerDefeats_PersistInSave()
+    {
+        var service = new SaveService(new ContentLoader(ContentRoot).Load());
+        var profile = new PlayerProfile();
+        var player = new Player();
+        player.Initialize(8, 11);
+
+        var save = service.CreateSave(
+            profile,
+            player,
+            "frostveil-path",
+            new[] { "lodge-runner-mina", "static-skater-orro" });
+        var roundTrip = service.Deserialize(service.Serialize(save));
+
+        Assert.Contains("lodge-runner-mina", roundTrip.DefeatedTrainers);
+        Assert.Contains("static-skater-orro", roundTrip.DefeatedTrainers);
+    }
+
+    [Fact]
+    public void ShrineGate_BlocksBeforeTwoFrostveilTrainerDefeats()
+    {
+        var map = new MapLoader(Path.Combine(ContentRoot, "maps")).Load("snowbell-lodge.json");
+        var profile = new PlayerProfile();
+        var defeated = new HashSet<string> { "lodge-runner-mina" };
+
+        FrostveilShrineGate.RefreshProgress(profile, defeated);
+
+        Assert.False(profile.HasFlag(FrostveilShrineGate.UnlockedFlag));
+        Assert.False(MapInteractionService.IsTileWalkable(map, profile, 15, 1));
+        Assert.True(MapInteractionService.TryGetBlockedMessage(map, profile, 15, 1, out var blocked));
+        Assert.Contains("two Frostveil trainers", blocked);
+        Assert.Equal(
+            "snowbell-keeper-talk",
+            FrostveilShrineGate.ResolveKeeperDialogueId(profile, defeated, "snowbell-keeper-talk"));
+    }
+
+    [Fact]
+    public void ShrineGate_OpensAfterTwoFrostveilTrainerDefeats()
+    {
+        var map = new MapLoader(Path.Combine(ContentRoot, "maps")).Load("snowbell-lodge.json");
+        var profile = new PlayerProfile();
+        var defeated = new HashSet<string> { "lodge-runner-mina", "static-skater-orro" };
+
+        Assert.True(FrostveilShrineGate.RefreshProgress(profile, defeated));
+
+        Assert.True(profile.HasFlag(FrostveilShrineGate.UnlockedFlag));
+        Assert.True(MapInteractionService.IsTileWalkable(map, profile, 15, 1));
+        Assert.Contains(map.Transitions, transition =>
+            transition.ToMapId == "snowbell-shrine"
+            && transition.RequiredFlag == FrostveilShrineGate.UnlockedFlag);
+        Assert.Contains(
+            new DialogueLoader(Path.Combine(ContentRoot, "dialogue")).Load("snowbell-lodge.json").Dialogues,
+            dialogue => dialogue.Id == "snowbell-keeper-talk-unlocked");
+        Assert.Equal(
+            "snowbell-keeper-talk-unlocked",
+            FrostveilShrineGate.ResolveKeeperDialogueId(profile, defeated, "snowbell-keeper-talk"));
     }
 
     [Fact]

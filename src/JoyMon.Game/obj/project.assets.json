@@ -2,6 +2,13 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "MonoGame.Content.Builder.Task/3.8.2.1105": {
+        "type": "package",
+        "build": {
+          "build/MonoGame.Content.Builder.Task.props": {},
+          "build/MonoGame.Content.Builder.Task.targets": {}
+        }
+      },
       "MonoGame.Framework.DesktopGL/3.8.2.1105": {
         "type": "package",
         "dependencies": {
@@ -119,6 +126,20 @@
     }
   },
   "libraries": {
+    "MonoGame.Content.Builder.Task/3.8.2.1105": {
+      "sha512": "wNlkLaITOqMs9MmCYLp3Qc7QfFng3FhIq/b+njdYV3cTVpLYgs/i56FYtJjm8jLoUA/2sJ36Qo/uqWpgW+jBuQ==",
+      "type": "package",
+      "path": "monogame.content.builder.task/3.8.2.1105",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "build/MonoGame.Content.Builder.Task.props",
+        "build/MonoGame.Content.Builder.Task.targets",
+        "monogame.content.builder.task.3.8.2.1105.nupkg.sha512",
+        "monogame.content.builder.task.nuspec"
+      ]
+    },
     "MonoGame.Framework.DesktopGL/3.8.2.1105": {
       "sha512": "QwjhmpyMZ9js4zqoYN/0cz//nYZ1u5yB8KWJ1P7nbViqfUyzuFDvGqgUEXFLp+n0Rx4z9PuKfwL5nQpp9LrXhg==",
       "type": "package",
@@ -248,6 +269,7 @@
     "net8.0": [
       "JoyMon.Content >= 1.0.0",
       "JoyMon.Core >= 1.0.0",
+      "MonoGame.Content.Builder.Task >= 3.8.2.1105",
       "MonoGame.Framework.DesktopGL >= 3.8.2.1105"
     ]
   },
@@ -300,6 +322,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "MonoGame.Content.Builder.Task": {
+            "target": "Package",
+            "version": "[3.8.2.1105, )"
+          },
           "MonoGame.Framework.DesktopGL": {
             "target": "Package",
             "version": "[3.8.2.1105, )"

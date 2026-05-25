@@ -1,0 +1,124 @@
+{
+  "npcs": [
+    {
+      "id": "bloomrail-healer",
+      "name": "Station Medic",
+      "mapId": "bloomrail-station",
+      "tilePosition": { "x": 4, "y": 8 },
+      "facingDirection": "right",
+      "dialogueId": "bloomrail-healer-talk",
+      "spriteId": "operator"
+    },
+    {
+      "id": "bloomrail-conductor",
+      "name": "Station Conductor",
+      "mapId": "bloomrail-station",
+      "tilePosition": { "x": 10, "y": 4 },
+      "facingDirection": "down",
+      "dialogueId": "bloomrail-conductor-talk",
+      "spriteId": "guard"
+    },
+    {
+      "id": "bloomrail-npc-1",
+      "name": "Waiting Passenger",
+      "mapId": "bloomrail-station",
+      "tilePosition": { "x": 13, "y": 6 },
+      "facingDirection": "left",
+      "dialogueId": "bloomrail-npc-1-talk",
+      "spriteId": "kid"
+    },
+    {
+      "id": "bloomrail-npc-2",
+      "name": "Station Regular",
+      "mapId": "bloomrail-station",
+      "tilePosition": { "x": 7, "y": 9 },
+      "facingDirection": "up",
+      "dialogueId": "bloomrail-npc-2-talk",
+      "spriteId": "operator"
+    },
+    {
+      "id": "bloomrail-npc-3",
+      "name": "Tourist",
+      "mapId": "bloomrail-station",
+      "tilePosition": { "x": 16, "y": 8 },
+      "facingDirection": "down",
+      "dialogueId": "bloomrail-npc-3-talk",
+      "spriteId": "dr-cedar"
+    },
+    {
+      "id": "bloomrail-npc-4",
+      "name": "Flower Vendor",
+      "mapId": "bloomrail-station",
+      "tilePosition": { "x": 2, "y": 10 },
+      "facingDirection": "right",
+      "dialogueId": "bloomrail-npc-4-talk",
+      "spriteId": "kid"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "bloomrail-healer-talk",
+      "speaker": "Station Medic",
+      "lines": [
+        "Welcome to the Bloomrail Station rest area.",
+        "Trains are delayed, but you can rest your JoyMon here."
+      ]
+    },
+    {
+      "id": "bloomrail-conductor-talk",
+      "speaker": "Station Conductor",
+      "lines": [
+        "The train is ready, but the platform is blocked due to the field problems to the east.",
+        "We cannot depart until the flower pollen settles."
+      ]
+    },
+    {
+      "id": "bloomrail-conductor-talk-solved",
+      "speaker": "Station Conductor",
+      "lines": [
+        "Thank you! You cleared the pollen fields and defeated the trainers.",
+        "The platform is now open. All aboard!",
+        "But be careful... there is a strange creature blocking the train controls inside!"
+      ]
+    },
+    {
+      "id": "bloomrail-conductor-talk-cleared",
+      "speaker": "Station Conductor",
+      "lines": [
+        "You defeated the monster in the engine room!",
+        "The train service has officially resumed.",
+        "Step onto the train at column 11 of the platform to depart for the next region!"
+      ]
+    },
+    {
+      "id": "bloomrail-npc-1-talk",
+      "speaker": "Waiting Passenger",
+      "lines": [
+        "I was trying to travel to the next town, but the conductor won't let anyone onto the platform."
+      ]
+    },
+    {
+      "id": "bloomrail-npc-2-talk",
+      "speaker": "Station Regular",
+      "lines": [
+        "I hear Pollibun and Railmouse are nesting in the Flowerline Fields.",
+        "They are usually peaceful, but something has agitated them."
+      ]
+    },
+    {
+      "id": "bloomrail-npc-3-talk",
+      "speaker": "Tourist",
+      "lines": [
+        "This station is famous for its floral layout, but the pollen today is making my staticrow sneeze!"
+      ]
+    },
+    {
+      "id": "bloomrail-npc-4-talk",
+      "speaker": "Flower Vendor",
+      "lines": [
+        "If you are headed to the fields, watch out for the pollen maze.",
+        "It is easy to lose your way."
+      ]
+    }
+  ]
+}

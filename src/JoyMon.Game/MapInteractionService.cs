@@ -80,6 +80,20 @@ public static class MapInteractionService
 
         foreach (var trigger in map.Triggers)
         {
+            if (trigger.Kind == "lockedDoor"
+                && !string.IsNullOrEmpty(trigger.RequiredFlag)
+                && !profile.HasFlag(trigger.RequiredFlag))
+            {
+                foreach (var door in trigger.DoorTiles)
+                {
+                    if (door.X == x && door.Y == y)
+                    {
+                        message = trigger.BlockedMessage ?? "It is locked.";
+                        return true;
+                    }
+                }
+            }
+
             if (!IsRockGate(trigger) || profile.HasFlag(trigger.RequiredFlag!))
                 continue;
 
@@ -124,6 +138,7 @@ public static class MapInteractionService
         {
             case "switch":
             case "minecartSwitch":
+            case "bellSwitch":
                 if (!string.IsNullOrEmpty(trigger.SetsFlag) && profile.HasFlag(trigger.SetsFlag))
                 {
                     message = trigger.AlreadyMessage ?? "The switch is already set.";
@@ -133,7 +148,10 @@ public static class MapInteractionService
                 if (!string.IsNullOrEmpty(trigger.SetsFlag))
                     profile.SetFlag(trigger.SetsFlag, true);
 
-                message = trigger.Message ?? "You flipped the switch.";
+                TryResolvePattern(profile, trigger);
+                message = trigger.Message ?? (trigger.Kind == "bellSwitch"
+                    ? "The shrine bell rings out across the chambers."
+                    : "You flipped the switch.");
                 return true;
 
             case "pickup":
@@ -169,6 +187,7 @@ public static class MapInteractionService
                 return true;
 
             case "healingSpring":
+            case "warmingBrazier":
                 onHealParty?.Invoke();
                 message = trigger.Message ?? "Your party was restored!";
                 return true;
@@ -186,6 +205,19 @@ public static class MapInteractionService
         trigger.Kind == "rockGate"
         && !string.IsNullOrEmpty(trigger.RequiredFlag)
         && trigger.RockTiles.Count > 0;
+
+    private static void TryResolvePattern(PlayerProfile profile, MapTriggerContent trigger)
+    {
+        if (string.IsNullOrWhiteSpace(trigger.PatternSolvedFlag)
+            || trigger.PatternFlags.Count == 0)
+            return;
+
+        if (profile.HasFlag(trigger.PatternSolvedFlag))
+            return;
+
+        if (trigger.PatternFlags.All(profile.HasFlag))
+            profile.SetFlag(trigger.PatternSolvedFlag, true);
+    }
 
     private static List<TransitionTileContent> GetTrackTiles(MapTriggerContent trigger)
     {

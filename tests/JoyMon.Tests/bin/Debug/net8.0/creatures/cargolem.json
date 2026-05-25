@@ -1,0 +1,14 @@
+{
+  "id": "cargolem",
+  "name": "Cargolem",
+  "type": "Stone",
+  "secondaryType": "Spark",
+  "baseStats": {
+    "maxHp": 65,
+    "attack": 12,
+    "defense": 10,
+    "speed": 7
+  },
+  "starterEligible": false,
+  "learnset": ["pebble-toss", "spark-peck", "tackle"]
+}

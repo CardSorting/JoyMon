@@ -69,7 +69,10 @@ public class BattleSystem
         }
 
         if (!state.IsOver && !actor.IsFainted)
+        {
             ProcessBurnAfterActing(state, actor);
+            ProcessChillAfterActing(state, actor);
+        }
     }
 
     private void ResolveFight(BattleState state, BattleCommand.Fight fight, JoyMonInstance actor, JoyMonInstance target)
@@ -112,7 +115,10 @@ public class BattleSystem
         state.Events.Add(new BattleEvent.DamageDealt(actor.Species.Name, target.Species.Name, damage));
 
         if (!target.IsFainted)
+        {
             TryApplyBurn(state, move, target);
+            TryApplyChill(state, move, target);
+        }
 
         if (target.IsFainted)
             state.Events.Add(new BattleEvent.JoyMonFainted(target.Species.Name));
@@ -146,6 +152,21 @@ public class BattleSystem
         state.Events.Add(new BattleEvent.StatusApplied(target.Species.Name, BattleStatus.Burn));
     }
 
+    private void TryApplyChill(BattleState state, MoveDefinition move, JoyMonInstance target)
+    {
+        if (!move.CanInflictChill) return;
+
+        var chance = move.EffectChance > 0
+            ? move.EffectChance
+            : BattleStatus.DefaultChillChancePercent;
+
+        if (_rng.NextDouble() * 100.0 >= chance)
+            return;
+
+        target.ChillTurnsRemaining = BattleStatus.ChillDurationTurns;
+        state.Events.Add(new BattleEvent.StatusApplied(target.Species.Name, BattleStatus.Chill));
+    }
+
     private static int ApplyGuardReduction(JoyMonInstance defender, int damage)
     {
         if (!defender.IsGuarding) return damage;
@@ -170,6 +191,15 @@ public class BattleSystem
 
         if (actor.IsFainted)
             state.Events.Add(new BattleEvent.JoyMonFainted(actor.Species.Name));
+    }
+
+    private void ProcessChillAfterActing(BattleState state, JoyMonInstance actor)
+    {
+        if (actor.ChillTurnsRemaining <= 0) return;
+
+        actor.ChillTurnsRemaining--;
+        if (actor.ChillTurnsRemaining == 0)
+            state.Events.Add(new BattleEvent.StatusExpired(actor.Species.Name, BattleStatus.Chill));
     }
 
     private static void ExpireUnusedGuards(BattleState state)

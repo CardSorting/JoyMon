@@ -109,6 +109,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     private readonly Dictionary<string, TrainerContent> _trainers = new();
     private string? _pendingTrainerBattleId;
     private string? _activeTrainerId;
+    private int _activeTrainerPartyIndex;
 
     // Boss
     private readonly Dictionary<string, BossContent> _bossesByMapId = new();
@@ -293,24 +294,26 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
 
                 foreach (var file in Directory.EnumerateFiles(trainersDir, "*.json"))
                 {
-                    var trainer = loader.Load(Path.GetFileName(file), validCreatureIds, validMoveIds);
-                    _trainers[trainer.Id] = trainer;
-
-                    var facing = ParseDirection(trainer.FacingDirection);
-                    var trainerNpc = new Npc(
-                        trainer.Id,
-                        trainer.DisplayName,
-                        trainer.TilePosition.X,
-                        trainer.TilePosition.Y,
-                        facing,
-                        dialogueId: trainer.Id,
-                        trainer.SpriteId,
-                        trainer.MapId);
-                    _npcs.Add(trainerNpc);
-
-                    if (!_npcTextures.ContainsKey(trainer.SpriteId))
+                    foreach (var trainer in loader.LoadAll(Path.GetFileName(file), validCreatureIds, validMoveIds))
                     {
-                        _npcTextures[trainer.SpriteId] = CreateNpcTexture(GraphicsDevice, trainer.SpriteId);
+                        _trainers[trainer.Id] = trainer;
+
+                        var facing = ParseDirection(trainer.FacingDirection);
+                        var trainerNpc = new Npc(
+                            trainer.Id,
+                            trainer.DisplayName,
+                            trainer.TilePosition.X,
+                            trainer.TilePosition.Y,
+                            facing,
+                            dialogueId: trainer.Id,
+                            trainer.SpriteId,
+                            trainer.MapId);
+                        _npcs.Add(trainerNpc);
+
+                        if (!_npcTextures.ContainsKey(trainer.SpriteId))
+                        {
+                            _npcTextures[trainer.SpriteId] = CreateNpcTexture(GraphicsDevice, trainer.SpriteId);
+                        }
                     }
                 }
             }
@@ -672,6 +675,8 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             _defeatedTrainers.Clear();
             foreach (var trainerId in save.DefeatedTrainers)
                 _defeatedTrainers.Add(trainerId);
+            FrostveilShrineGate.RefreshProgress(_profile, _defeatedTrainers);
+            BloomrailPlatformGate.RefreshProgress(_profile, _defeatedTrainers);
 
             _talkingToDrCedar = false;
             _dialogue.Close();
@@ -799,7 +804,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 {
                     _talkingToDrCedar = true;
                 }
-                else if (npc.Id is "trial-grove-healer" or "ashbend-healer" or "ashbend-mine-healer" or "snowbell-healer")
+                else if (npc.Id is "trial-grove-healer" or "ashbend-healer" or "ashbend-mine-healer" or "snowbell-healer" or "bloomrail-healer")
                 {
                     HealParty();
                     AutosaveCurrentGame();
@@ -826,7 +831,25 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 {
                     dialogueId = "sleepy-guard-block";
                 }
+                else if (npc.Id == "snowbell-keeper")
+                {
+                    dialogueId = FrostveilShrineGate.ResolveKeeperDialogueId(_profile, _defeatedTrainers, npc.DialogueId);
+                }
+                else if (npc.Id == "bloomrail-conductor")
+                {
+                    dialogueId = BloomrailPlatformGate.ResolveConductorDialogueId(_profile, _defeatedTrainers, npc.DialogueId);
+                }
+                else if (npc.Id == "shrine-bell-guide" && _profile.HasFlag(ShrineFlags.BellPatternSolved))
+                {
+                    dialogueId = "shrine-bell-guide-talk-cleared";
+                }
                 else if (npc.MapId == "ashbend-camp" && _profile.HasFlag("ashbend_mine_cleared"))
+                {
+                    var clearedDialogueId = $"{npc.DialogueId}-cleared";
+                    if (_dialogues.ContainsKey(clearedDialogueId))
+                        dialogueId = clearedDialogueId;
+                }
+                else if (npc.MapId == "snowbell-lodge" && _profile.HasFlag("snowbell_shrine_cleared"))
                 {
                     var clearedDialogueId = $"{npc.DialogueId}-cleared";
                     if (_dialogues.ContainsKey(clearedDialogueId))
@@ -863,16 +886,13 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
 
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        _player.Update(dt, inputDir, (x, y) =>
+        Func<int, int, bool> isWalkable = (x, y) =>
         {
             if (_currentMap is null) return false;
-            // Map boundary check
             if (x < 0 || x >= _currentMap.Width || y < 0 || y >= _currentMap.Height)
                 return false;
-            // NPC solid collision check
             if (_npcs.Any(npc => npc.MapId == _currentMap.Id && npc.X == x && npc.Y == y))
                 return false;
-            // Collision layer check
             if (!MapInteractionService.IsTileWalkable(_currentMap, _profile, x, y))
             {
                 if (MapInteractionService.TryGetBlockedMessage(_currentMap, _profile, x, y, out var blockedMessage)
@@ -884,7 +904,17 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             }
 
             return true;
-        });
+        };
+
+        Func<int, int, bool>? isIce = _currentMap is null
+            ? null
+            : (x, y) => MapMovementService.IsIce(_currentMap, x, y);
+
+        Func<int, int, string>? getMovementEffect = _currentMap is null
+            ? null
+            : (x, y) => MapMovementService.GetEffect(_currentMap, x, y);
+
+        _player.Update(dt, inputDir, isWalkable, isIce, getMovementEffect);
 
         // Center camera on player visual position
         if (_currentMap is not null)
@@ -1008,6 +1038,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             return;
 
         _activeTrainerId = null;
+        _activeTrainerPartyIndex = 0;
         _activeBossBattle = false;
         _activeBoss = null;
         _lastWildSpeciesId = speciesId;
@@ -1043,17 +1074,26 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         if (!TrainerInteraction.CanStartBattle(trainer, _defeatedTrainers))
             return;
 
+        StartTrainerBattleMember(trainer, partyIndex: 0);
+    }
+
+    private bool StartTrainerBattleMember(TrainerContent trainer, int partyIndex)
+    {
+        if (partyIndex < 0 || partyIndex >= trainer.Party.Count)
+            return false;
+
         var activeJoyMon = _profile.Party.FirstOrDefault(joymon => !joymon.IsFainted)
             ?? _profile.Party.FirstOrDefault();
 
-        if (activeJoyMon is null || trainer.Party.Count == 0)
-            return;
+        if (activeJoyMon is null)
+            return false;
 
-        var opponent = CreateTrainerJoyMon(trainer.Party[0]);
+        var opponent = CreateTrainerJoyMon(trainer.Party[partyIndex]);
         if (opponent is null)
-            return;
+            return false;
 
-        _activeTrainerId = trainerId;
+        _activeTrainerId = trainer.Id;
+        _activeTrainerPartyIndex = partyIndex;
         _activeBossBattle = false;
         _activeBoss = null;
         _wildEncounter = null;
@@ -1071,6 +1111,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
         _player.MoveProgress = 1.0f;
 
         State = GameState.Battle;
+        return true;
     }
 
     private JoyMonInstance? CreateTrainerJoyMon(TrainerPartyMemberContent member)
@@ -1100,6 +1141,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
 
         var opponent = species.CreateInstance(boss.Level);
         _activeTrainerId = null;
+        _activeTrainerPartyIndex = 0;
         _activeBossBattle = true;
         _activeBoss = boss;
         _wildEncounter = null;
@@ -1148,17 +1190,32 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
     private void CompleteBattle(BattleSceneOutcome outcome)
     {
         var trainerId = _activeTrainerId;
+        var trainerPartyIndex = _activeTrainerPartyIndex;
         var wasTrainerBattle = trainerId is not null;
         var wasBossBattle = _activeBossBattle;
         var boss = _activeBoss;
         _activeTrainerId = null;
+        _activeTrainerPartyIndex = 0;
         _activeBossBattle = false;
         _activeBoss = null;
         _battleScene = null;
         _wildEncounter = null;
 
+        if (outcome == BattleSceneOutcome.Won
+            && trainerId is not null
+            && _trainers.TryGetValue(trainerId, out var activeTrainer)
+            && trainerPartyIndex + 1 < activeTrainer.Party.Count
+            && StartTrainerBattleMember(activeTrainer, trainerPartyIndex + 1))
+        {
+            return;
+        }
+
         if (trainerId is not null)
+        {
             TrainerInteraction.RecordDefeat(_defeatedTrainers, trainerId, outcome);
+            FrostveilShrineGate.RefreshProgress(_profile, _defeatedTrainers);
+            BloomrailPlatformGate.RefreshProgress(_profile, _defeatedTrainers);
+        }
 
         if (outcome == BattleSceneOutcome.Captured && !string.IsNullOrWhiteSpace(_lastWildSpeciesId))
             _profile.RecordCapture(_lastWildSpeciesId);
@@ -1335,6 +1392,7 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
                 break;
         }
 
+        var currentEffect = _currentMap is not null ? MapMovementService.GetEffect(_currentMap, _player.X, _player.Y) : "normal";
         _debug.Draw(
             _spriteBatch,
             State,
@@ -1342,7 +1400,9 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             _currentMap?.Id ?? "none",
             _player.X,
             _player.Y,
-            _player.Facing.ToString()
+            _player.Facing.ToString(),
+            _player.IsSliding,
+            currentEffect
         );
         _virt.EndDraw(_spriteBatch, GraphicsDevice);
 
@@ -1376,6 +1436,38 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: cameraMatrix);
 
             _mapRenderer.Draw(_spriteBatch);
+
+            // Draw wind markers
+            var movementEffectLayer = _currentMap.Layers.MovementEffect;
+            if (movementEffectLayer is not null)
+            {
+                for (int y = 0; y < _currentMap.Height; y++)
+                {
+                    if (y >= movementEffectLayer.Count) break;
+                    var row = movementEffectLayer[y];
+                    if (row is null) continue;
+                    for (int x = 0; x < _currentMap.Width; x++)
+                    {
+                        if (x >= row.Count) break;
+                        var effect = row[x];
+                        if (string.IsNullOrEmpty(effect)) continue;
+
+                        string marker = "";
+                        if (string.Equals(effect, "pollen_wind_north", StringComparison.OrdinalIgnoreCase)) marker = "^";
+                        else if (string.Equals(effect, "pollen_wind_south", StringComparison.OrdinalIgnoreCase)) marker = "v";
+                        else if (string.Equals(effect, "pollen_wind_east", StringComparison.OrdinalIgnoreCase)) marker = ">";
+                        else if (string.Equals(effect, "pollen_wind_west", StringComparison.OrdinalIgnoreCase)) marker = "<";
+
+                        if (marker != "")
+                        {
+                            var rect = new Rectangle(x * _currentMap.TileSize, y * _currentMap.TileSize, _currentMap.TileSize, _currentMap.TileSize);
+                            _spriteBatch.Draw(_pixel, rect, new Color(255, 215, 0, 40));
+                            var textPos = new Vector2(x * _currentMap.TileSize + 4, y * _currentMap.TileSize + 1);
+                            _spriteBatch.DrawString(_font, marker, textPos, Color.Gold * 0.8f);
+                        }
+                    }
+                }
+            }
 
             // Draw NPCs
             foreach (var npc in _npcs)

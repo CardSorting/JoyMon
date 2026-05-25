@@ -1,0 +1,33 @@
+{
+  "id": "flowerline-fields-encounters",
+  "mapId": "flowerline-fields",
+  "zoneId": "flower-grass",
+  "tileIds": [9],
+  "encounterRate": 0.12,
+  "entries": [
+    {
+      "creatureId": "pollibun",
+      "minLevel": 21,
+      "maxLevel": 23,
+      "weight": 30
+    },
+    {
+      "creatureId": "railmouse",
+      "minLevel": 22,
+      "maxLevel": 24,
+      "weight": 30
+    },
+    {
+      "creatureId": "queuebee",
+      "minLevel": 21,
+      "maxLevel": 23,
+      "weight": 20
+    },
+    {
+      "creatureId": "chilleaf",
+      "minLevel": 22,
+      "maxLevel": 24,
+      "weight": 20
+    }
+  ]
+}

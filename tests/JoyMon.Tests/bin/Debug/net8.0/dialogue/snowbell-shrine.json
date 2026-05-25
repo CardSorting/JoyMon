@@ -1,0 +1,76 @@
+{
+  "npcs": [
+    {
+      "id": "shrine-entrance-plaque",
+      "name": "Shrine Plaque",
+      "mapId": "snowbell-shrine",
+      "tilePosition": { "x": 11, "y": 15 },
+      "facingDirection": "down",
+      "dialogueId": "shrine-entrance-plaque-talk",
+      "spriteId": "sign"
+    },
+    {
+      "id": "shrine-bell-guide",
+      "name": "Frost Acolyte",
+      "mapId": "snowbell-shrine",
+      "tilePosition": { "x": 8, "y": 9 },
+      "facingDirection": "right",
+      "dialogueId": "shrine-bell-guide-talk",
+      "spriteId": "operator"
+    },
+    {
+      "id": "shrine-boss-chamber-sign",
+      "name": "Inner Sanctum Seal",
+      "mapId": "snowbell-shrine",
+      "tilePosition": { "x": 11, "y": 2 },
+      "facingDirection": "down",
+      "dialogueId": "shrine-boss-chamber-talk",
+      "spriteId": "sign"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "shrine-entrance-plaque-talk",
+      "speaker": "Shrine Plaque",
+      "lines": [
+        "SNOWBELL SHRINE — RING THE BELLS TO OPEN THE INNER HALL",
+        "The ice floor will carry you. Mind the frozen seal ahead."
+      ]
+    },
+    {
+      "id": "shrine-bell-guide-talk",
+      "speaker": "Frost Acolyte",
+      "lines": [
+        "Three bells guard the inner chamber: north, west, and east.",
+        "Ring each one, and the frozen door will yield.",
+        "Warm yourself at the brazier before the ice puzzles wear you down."
+      ]
+    },
+    {
+      "id": "shrine-bell-guide-talk-cleared",
+      "speaker": "Frost Acolyte",
+      "lines": [
+        "The bells have spoken. The inner path is open.",
+        "Beyond lies the sanctum. Its guardian has not yet awakened."
+      ]
+    },
+    {
+      "id": "shrine-boss-chamber-talk",
+      "speaker": "Inner Sanctum Seal",
+      "lines": [
+        "INNER SANCTUM — GUARDIAN CHAMBER SEALED",
+        "A great Frost presence sleeps beyond this threshold.",
+        "Placeholder: the shrine boss will be faced here in a future trial."
+      ]
+    },
+    {
+      "id": "shrine-boss-chamber-talk-cleared",
+      "speaker": "Inner Sanctum Seal",
+      "lines": [
+        "INNER SANCTUM — GUARDIAN CHAMBER",
+        "The great presence of this shrine has been calmed.",
+        "The Frostveil region is at peace."
+      ]
+    }
+  ]
+}

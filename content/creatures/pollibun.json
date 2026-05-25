@@ -1,0 +1,14 @@
+{
+  "id": "pollibun",
+  "name": "Pollibun",
+  "type": "Moss",
+  "secondaryType": "Echo",
+  "baseStats": {
+    "maxHp": 55,
+    "attack": 8,
+    "defense": 9,
+    "speed": 10
+  },
+  "starterEligible": false,
+  "learnset": ["moss-tap", "echo-chirp", "tackle"]
+}
