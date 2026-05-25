@@ -1,0 +1,8 @@
+{
+  "id": "spark-peck",
+  "name": "Spark Peck",
+  "type": "Spark",
+  "power": 45,
+  "accuracy": 90,
+  "maxUses": 12
+}

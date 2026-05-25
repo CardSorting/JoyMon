@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/JoyMonFont.spritefont</SourceFile>
+  <SourceTime>2026-05-25T04:29:05.0631497-06:00</SourceTime>
+  <DestFile>/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Game/bin/DesktopGL/Content/JoyMonFont.xnb</DestFile>
+  <DestTime>2026-05-25T04:33:39.8500256-06:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2025-10-20T08:25:32-06:00</ImporterTime>
+  <Processor>FontDescriptionProcessor</Processor>
+  <ProcessorTime>2025-10-20T08:25:32-06:00</ProcessorTime>
+  <Parameters>
+    <Key>PremultiplyAlpha</Key>
+    <Value>True</Value>
+  </Parameters>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

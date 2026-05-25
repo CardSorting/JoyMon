@@ -1,0 +1,13 @@
+{
+  "id": "cindermite",
+  "name": "Cindermite",
+  "type": "Ember",
+  "baseStats": {
+    "maxHp": 42,
+    "attack": 9,
+    "defense": 6,
+    "speed": 8
+  },
+  "starterEligible": false,
+  "learnset": ["tackle"]
+}

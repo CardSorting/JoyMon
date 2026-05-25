@@ -1,0 +1,94 @@
+{
+  "npcs": [
+    {
+      "id": "dr-cedar",
+      "name": "Dr. Cedar",
+      "mapId": "starter-town",
+      "tilePosition": { "x": 8, "y": 5 },
+      "facingDirection": "down",
+      "dialogueId": "dr-cedar-talk",
+      "spriteId": "dr-cedar"
+    },
+    {
+      "id": "sleepy-guard",
+      "name": "Sleepy Route Guard",
+      "mapId": "starter-town",
+      "tilePosition": { "x": 15, "y": 8 },
+      "facingDirection": "left",
+      "dialogueId": "sleepy-guard-talk",
+      "spriteId": "guard"
+    },
+    {
+      "id": "tutorial-kid",
+      "name": "Tutorial Kid",
+      "mapId": "starter-town",
+      "tilePosition": { "x": 4, "y": 4 },
+      "facingDirection": "right",
+      "dialogueId": "tutorial-kid-talk",
+      "spriteId": "kid"
+    },
+    {
+      "id": "tired-operator",
+      "name": "Tired Operator",
+      "mapId": "starter-town",
+      "tilePosition": { "x": 12, "y": 11 },
+      "facingDirection": "up",
+      "dialogueId": "tired-operator-talk",
+      "spriteId": "operator"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "dr-cedar-talk",
+      "speaker": "Dr. Cedar",
+      "lines": [
+        "Hello there! I am Dr. Cedar.",
+        "Welcome to Starter Town!",
+        "Are you ready for your JoyMon adventure?"
+      ]
+    },
+    {
+      "id": "dr-cedar-after",
+      "speaker": "Dr. Cedar",
+      "lines": [
+        "Take good care of your JoyMon!",
+        "It will grow stronger as you travel together."
+      ]
+    },
+    {
+      "id": "sleepy-guard-block",
+      "speaker": "Sleepy Route Guard",
+      "lines": [
+        "Hold it! Route 1 is dangerous.",
+        "You cannot pass without a JoyMon!",
+        "Go see Dr. Cedar in town first."
+      ]
+    },
+    {
+      "id": "sleepy-guard-talk",
+      "speaker": "Sleepy Route Guard",
+      "lines": [
+        "Zzz... No entry to Route 1...",
+        "Wait, let me sleep for five more minutes..."
+      ]
+    },
+    {
+      "id": "tutorial-kid-talk",
+      "speaker": "Tutorial Kid",
+      "lines": [
+        "Hey! Did you know?",
+        "You can press F3 to toggle the debug menu!",
+        "It's super cool!"
+      ]
+    },
+    {
+      "id": "tired-operator-talk",
+      "speaker": "Tired Operator",
+      "lines": [
+        "I've been monitoring these servers all day.",
+        "Nothing but packet loss...",
+        "I need some coffee."
+      ]
+    }
+  ]
+}

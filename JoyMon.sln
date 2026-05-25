@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ABDDDF47-E1C8-4F24-BC54-CF3C9578F4A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoyMon.Core", "src\JoyMon.Core\JoyMon.Core.csproj", "{B707BD3B-44A6-4A99-B86B-58A3BB9F24B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoyMon.Content", "src\JoyMon.Content\JoyMon.Content.csproj", "{5EEA3B16-A468-41F5-B05C-7C42D37C3CC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoyMon.Game", "src\JoyMon.Game\JoyMon.Game.csproj", "{5113B2E0-7684-43C7-9296-B7A84B17EEB3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5070D4EB-1DD9-490C-8AD1-941A2886FD0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoyMon.Tests", "tests\JoyMon.Tests\JoyMon.Tests.csproj", "{95997E1A-6AA1-43A7-9043-13A9634BD166}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B707BD3B-44A6-4A99-B86B-58A3BB9F24B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B707BD3B-44A6-4A99-B86B-58A3BB9F24B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B707BD3B-44A6-4A99-B86B-58A3BB9F24B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B707BD3B-44A6-4A99-B86B-58A3BB9F24B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EEA3B16-A468-41F5-B05C-7C42D37C3CC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EEA3B16-A468-41F5-B05C-7C42D37C3CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EEA3B16-A468-41F5-B05C-7C42D37C3CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EEA3B16-A468-41F5-B05C-7C42D37C3CC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5113B2E0-7684-43C7-9296-B7A84B17EEB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5113B2E0-7684-43C7-9296-B7A84B17EEB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5113B2E0-7684-43C7-9296-B7A84B17EEB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5113B2E0-7684-43C7-9296-B7A84B17EEB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95997E1A-6AA1-43A7-9043-13A9634BD166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95997E1A-6AA1-43A7-9043-13A9634BD166}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95997E1A-6AA1-43A7-9043-13A9634BD166}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95997E1A-6AA1-43A7-9043-13A9634BD166}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B707BD3B-44A6-4A99-B86B-58A3BB9F24B9} = {ABDDDF47-E1C8-4F24-BC54-CF3C9578F4A6}
+		{5EEA3B16-A468-41F5-B05C-7C42D37C3CC1} = {ABDDDF47-E1C8-4F24-BC54-CF3C9578F4A6}
+		{5113B2E0-7684-43C7-9296-B7A84B17EEB3} = {ABDDDF47-E1C8-4F24-BC54-CF3C9578F4A6}
+		{95997E1A-6AA1-43A7-9043-13A9634BD166} = {5070D4EB-1DD9-490C-8AD1-941A2886FD0C}
+	EndGlobalSection
+EndGlobal

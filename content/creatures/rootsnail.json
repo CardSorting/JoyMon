@@ -1,0 +1,13 @@
+{
+  "id": "rootsnail",
+  "name": "Rootsnail",
+  "type": "Moss",
+  "baseStats": {
+    "maxHp": 52,
+    "attack": 6,
+    "defense": 10,
+    "speed": 3
+  },
+  "starterEligible": false,
+  "learnset": ["moss-tap", "tackle"]
+}

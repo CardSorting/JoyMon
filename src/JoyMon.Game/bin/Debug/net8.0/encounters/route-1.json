@@ -1,0 +1,27 @@
+{
+  "id": "route-1-encounters",
+  "mapId": "route-1",
+  "zoneId": "grass",
+  "tileIds": [1],
+  "encounterRate": 0.1,
+  "entries": [
+    {
+      "creatureId": "queuebee",
+      "minLevel": 2,
+      "maxLevel": 3,
+      "weight": 50
+    },
+    {
+      "creatureId": "rootsnail",
+      "minLevel": 2,
+      "maxLevel": 4,
+      "weight": 35
+    },
+    {
+      "creatureId": "cindermite",
+      "minLevel": 3,
+      "maxLevel": 3,
+      "weight": 15
+    }
+  ]
+}

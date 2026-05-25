@@ -1,0 +1,15 @@
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/bin/Debug/net8.0/JoyMon.Content.deps.json
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/bin/Debug/net8.0/JoyMon.Content.dll
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/bin/Debug/net8.0/JoyMon.Content.pdb
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/bin/Debug/net8.0/JoyMon.Core.dll
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/bin/Debug/net8.0/JoyMon.Core.pdb
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.Content.csproj.AssemblyReference.cache
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.Content.GeneratedMSBuildEditorConfig.editorconfig
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.Content.AssemblyInfoInputs.cache
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.Content.AssemblyInfo.cs
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.Content.csproj.CoreCompileInputs.cache
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.C.A9E5D6F8.Up2Date
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.Content.dll
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/refint/JoyMon.Content.dll
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/JoyMon.Content.pdb
+/Users/bozoegg/Desktop/JoyMon/src/JoyMon.Content/obj/Debug/net8.0/ref/JoyMon.Content.dll

@@ -1,0 +1,8 @@
+{
+  "id": "pebble-toss",
+  "name": "Pebble Toss",
+  "type": "Stone",
+  "power": 50,
+  "accuracy": 85,
+  "maxUses": 10
+}

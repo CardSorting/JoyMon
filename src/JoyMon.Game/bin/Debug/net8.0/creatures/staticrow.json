@@ -1,0 +1,13 @@
+{
+  "id": "staticrow",
+  "name": "Staticrow",
+  "type": "Spark",
+  "baseStats": {
+    "maxHp": 38,
+    "attack": 7,
+    "defense": 5,
+    "speed": 13
+  },
+  "starterEligible": true,
+  "learnset": ["spark-peck", "tackle"]
+}

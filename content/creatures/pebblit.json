@@ -1,0 +1,13 @@
+{
+  "id": "pebblit",
+  "name": "Pebblit",
+  "type": "Stone",
+  "baseStats": {
+    "maxHp": 58,
+    "attack": 6,
+    "defense": 11,
+    "speed": 4
+  },
+  "starterEligible": false,
+  "learnset": ["pebble-toss", "tackle"]
+}

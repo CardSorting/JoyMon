@@ -1,0 +1,8 @@
+{
+  "id": "tackle",
+  "name": "Tackle",
+  "type": "Neutral",
+  "power": 20,
+  "accuracy": 95,
+  "maxUses": 25
+}
