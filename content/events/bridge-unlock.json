@@ -1,0 +1,11 @@
+{
+  "id": "bridge-unlock",
+  "name": "Unlock Bridge to Emberpass",
+  "type": "flag_set",
+  "location": "bridge-crossing",
+  "flag": "old_watermill_cleared",
+  "condition": {
+    "completedQuests": ["old-watermill"]
+  },
+  "description": "Clears the ash debris blocking the path to Emberpass."
+}

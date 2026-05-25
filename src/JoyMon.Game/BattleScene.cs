@@ -360,6 +360,22 @@ public sealed class BattleScene
             Mode = BattleSceneMode.Finished;
     }
 
+    private static string StatusVerb(string statusName) =>
+        statusName switch
+        {
+            BattleStatus.Burn => "burned",
+            BattleStatus.Guard => "guarding",
+            _ => "affected",
+        };
+
+    private static string StatusNoun(string statusName) =>
+        statusName switch
+        {
+            BattleStatus.Burn => "burned",
+            BattleStatus.Guard => "guarding",
+            _ => statusName.ToLowerInvariant(),
+        };
+
     private static string ToMessage(BattleEvent battleEvent, bool runSubmitted)
     {
         return battleEvent switch
@@ -372,6 +388,9 @@ public sealed class BattleScene
             BattleEvent.BattleLost => runSubmitted ? "Got away safely!" : "You blacked out!",
             BattleEvent.XpGained e => $"Gained {e.Amount} XP!",
             BattleEvent.LevelUp e => $"{e.SpeciesName} grew to Lv.{e.NewLevel}!",
+            BattleEvent.StatusApplied e => $"{e.SpeciesName} was {StatusVerb(e.StatusName)}!",
+            BattleEvent.StatusExpired e => $"{e.SpeciesName} is no longer {StatusNoun(e.StatusName)}!",
+            BattleEvent.StatusDamage e => $"{e.SpeciesName} is hurt by {StatusNoun(e.StatusName)}! (-{e.Damage} HP)",
             _ => string.Empty,
         };
     }

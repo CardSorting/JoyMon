@@ -1,0 +1,153 @@
+{
+    "npcs": [
+        {
+            "id": "riverside-healer",
+            "name": "River Rest Keeper",
+            "mapId": "riverside-village",
+            "tilePosition": {
+                "x": 9,
+                "y": 10
+            },
+            "facingDirection": "right",
+            "dialogueId": "riverside-healer-talk",
+            "spriteId": "operator"
+        },
+        {
+            "id": "riverside-elder",
+            "name": "Village Elder",
+            "mapId": "riverside-village",
+            "tilePosition": {
+                "x": 3,
+                "y": 4
+            },
+            "facingDirection": "down",
+            "dialogueId": "riverside-elder-talk",
+            "spriteId": "dr-cedar"
+        },
+        {
+            "id": "riverside-fisher",
+            "name": "Nervous Fisher",
+            "mapId": "riverside-village",
+            "tilePosition": {
+                "x": 13,
+                "y": 5
+            },
+            "facingDirection": "up",
+            "dialogueId": "riverside-fisher-talk",
+            "spriteId": "kid"
+        },
+        {
+            "id": "riverside-worker",
+            "name": "Bridge Worker",
+            "mapId": "riverside-village",
+            "tilePosition": {
+                "x": 10,
+                "y": 5
+            },
+            "facingDirection": "left",
+            "dialogueId": "riverside-worker-talk",
+            "spriteId": "guard"
+        },
+        {
+            "id": "riverside-scout",
+            "name": "Upstream Scout",
+            "mapId": "riverside-village",
+            "tilePosition": {
+                "x": 4,
+                "y": 10
+            },
+            "facingDirection": "up",
+            "dialogueId": "riverside-scout-talk",
+            "spriteId": "kid"
+        },
+        {
+            "id": "mill-road-trainer",
+            "name": "Grass Trainer Lark",
+            "mapId": "mill-road",
+            "tilePosition": {
+                "x": 6,
+                "y": 7
+            },
+            "facingDirection": "down",
+            "dialogueId": "mill-road-trainer-talk",
+            "spriteId": "operator"
+        },
+        {
+            "id": "old-watermill-door",
+            "name": "Watermill Door",
+            "mapId": "old-watermill",
+            "tilePosition": {
+                "x": 10,
+                "y": 7
+            },
+            "facingDirection": "down",
+            "dialogueId": "old-watermill-door-talk",
+            "spriteId": "sign"
+        }
+    ],
+    "dialogues": [
+        {
+            "id": "riverside-healer-talk",
+            "speaker": "River Rest Keeper",
+            "lines": [
+                "You look like you've been through a trial. Rest here a while.",
+                "Your party is healed and ready for the road ahead."
+            ]
+        },
+        {
+            "id": "riverside-elder-talk",
+            "speaker": "Village Elder",
+            "lines": [
+                "Welcome to Riverside Village, young trainer.",
+                "The old watermill upstream stopped turning three nights ago.",
+                "Since then, strange Echo-type sounds drift down the mill road after dark.",
+                "Be careful if you head that way. Something is unsettling the land."
+            ]
+        },
+        {
+            "id": "riverside-fisher-talk",
+            "speaker": "Nervous Fisher",
+            "lines": [
+                "I've been fishing these waters for years, but lately it's spooky out there.",
+                "At night I hear humming from the mill road — like a creature singing.",
+                "I packed up early yesterday. The fish can wait."
+            ]
+        },
+        {
+            "id": "riverside-worker-talk",
+            "speaker": "Bridge Worker",
+            "lines": [
+                "Sorry, the bridge to the eastern shore is out for now.",
+                "The carpenter went missing a week ago — last seen near the watermill.",
+                "Repairs are delayed until we find him. You'll have to use the mill road instead."
+            ]
+        },
+        {
+            "id": "riverside-scout-talk",
+            "speaker": "Upstream Scout",
+            "lines": [
+                "I came down from the upper basin. The Lanternox are on the move.",
+                "I spotted at least three of them upstream, glowing brighter than I've ever seen.",
+                "They never come this far down the river. Something's driving them."
+            ]
+        },
+        {
+            "id": "mill-road-trainer-talk",
+            "speaker": "Grass Trainer Lark",
+            "lines": [
+                "Hey there! Want a quick battle? Oh wait, I'm resting right now.",
+                "But the grass up ahead is full of tough JoyMon. Glimmoo, Pebblit, even a new one — Drizzleaf.",
+                "Train on them before you reach the old watermill. You'll need the experience."
+            ]
+        },
+        {
+            "id": "old-watermill-door-talk",
+            "speaker": "Locked Door",
+            "lines": [
+                "The heavy wooden door is bolted shut from the inside.",
+                "A strange hum vibrates through the planks. You can't open it without a key.",
+                "Perhaps the key is hidden somewhere nearby..."
+            ]
+        }
+    ]
+}

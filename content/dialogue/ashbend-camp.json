@@ -1,0 +1,100 @@
+{
+    "npcs": [
+        {
+            "npcId": "healer",
+            "dialogs": [
+                {
+                    "id": "healer_greeting",
+                    "nextDialogId": null,
+                    "context": "default",
+                    "text": "Welcome to Ashbend Camp. If you're injured, just ask and we'll take care of you."
+                },
+                {
+                    "id": "healer_heal",
+                    "nextDialogId": null,
+                    "context": "heal",
+                    "text": "I've restored your creatures to full health."
+                }
+            ]
+        },
+        {
+            "npcId": "gambler",
+            "dialogs": [
+                {
+                    "id": "gambler_greeting",
+                    "nextDialogId": null,
+                    "context": "default",
+                    "text": "Care for a wager? Creatures battle for glory here in the Emberpass. 50 PokéCubes for a battle."
+                },
+                {
+                    "id": "gambler_challenge",
+                    "nextDialogId": null,
+                    "context": "challenge",
+                    "text": "Good luck. May the best creatures win."
+                }
+            ]
+        },
+        {
+            "npcId": "miner_1",
+            "dialogs": [
+                {
+                    "id": "miner_1_greeting",
+                    "nextDialogId": null,
+                    "context": "default",
+                    "text": "Watch your step. The old mine's unstable. We've sealed it off until we know it's safe."
+                }
+            ]
+        },
+        {
+            "npcId": "miner_2",
+            "dialogs": [
+                {
+                    "id": "miner_2_greeting",
+                    "nextDialogId": null,
+                    "context": "default",
+                    "text": "These Emberpass creatures are tougher than anything we've seen back in Riverside. Stay alert."
+                }
+            ]
+        },
+        {
+            "npcId": "villager",
+            "dialogs": [
+                {
+                    "id": "villager_greeting",
+                    "nextDialogId": null,
+                    "context": "default",
+                    "text": "Thank goodness you've made it. The Emberpass region is dangerous, but necessary for our survival."
+                },
+                {
+                    "id": "villager_advice",
+                    "nextDialogId": null,
+                    "context": "advice",
+                    "text": "If you encounter those sleeping creatures, they'll grow stronger. Don't wake them unless you're ready."
+                }
+            ]
+        },
+        {
+            "npcId": "elder",
+            "dialogs": [
+                {
+                    "id": "elder_greeting",
+                    "nextDialogId": null,
+                    "context": "default",
+                    "text": "Ah, a traveler from the west. We've heard stories about your battles at the Old Watermill."
+                },
+                {
+                    "id": "elder_quest",
+                    "nextDialogId": null,
+                    "context": "quest",
+                    "text": "The Emberpass mines hold ancient power. One day, we'll unlock them. Until then, we remain here, safe from the dangers outside."
+                },
+                {
+                    "id": "elder_tip",
+                    "nextDialogId": null,
+                    "context": "tip",
+                    "text": "The creatures here have adapted to the volcanic ash. Their Ember Type attacks are stronger when the air is smoky."
+                }
+            ]
+        }
+    ]
+}

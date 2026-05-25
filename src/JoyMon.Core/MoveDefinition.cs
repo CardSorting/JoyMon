@@ -11,8 +11,18 @@ public class MoveDefinition
     public int Power { get; }
     public int Accuracy { get; } // 0-100, percentage chance to hit
     public int MaxUses { get; }
+    public string? Effect { get; }
+    public int EffectChance { get; }
 
-    public MoveDefinition(string id, string name, JoyMonType type, int power, int accuracy, int maxUses)
+    public MoveDefinition(
+        string id,
+        string name,
+        JoyMonType type,
+        int power,
+        int accuracy,
+        int maxUses,
+        string? effect = null,
+        int effectChance = 0)
     {
         Id = id;
         Name = name;
@@ -20,5 +30,10 @@ public class MoveDefinition
         Power = power;
         Accuracy = accuracy;
         MaxUses = maxUses;
+        Effect = effect;
+        EffectChance = effectChance;
     }
+
+    public bool AppliesGuard => Effect == MoveEffects.Guard;
+    public bool CanInflictBurn => Effect == MoveEffects.Burn;
 }

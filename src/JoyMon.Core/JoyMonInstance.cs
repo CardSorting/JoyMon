@@ -15,6 +15,12 @@ public class JoyMonInstance
     public int Speed { get; private set; }
     public int Xp { get; set; }
     public int[] RemainingUses { get; }
+    public int BurnTurnsRemaining { get; set; }
+    public bool IsGuarding { get; set; }
+
+    public string? BattleStatusLabel =>
+        BurnTurnsRemaining > 0 ? "BRN" :
+        IsGuarding ? "GRD" : null;
 
     public JoyMonInstance(
         JoyMonSpecies species,

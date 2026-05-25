@@ -68,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet8/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -126,7 +126,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet8/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -176,10 +176,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "MonoGame.Content.Builder.Task": {
-              "target": "Package",
-              "version": "[3.8.2.1105, )"
-            },
             "MonoGame.Framework.DesktopGL": {
               "target": "Package",
               "version": "[3.8.2.1105, )"
@@ -201,7 +197,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet8/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -291,7 +287,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet8/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/bozoegg/.dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

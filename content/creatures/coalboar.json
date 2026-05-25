@@ -1,0 +1,14 @@
+{
+    "id": "coalboar",
+    "name": "Coalboar",
+    "type": "Stone",
+    "secondaryType": "Ember",
+    "baseStats": {
+        "maxHp": 102,
+        "attack": 10,
+        "defense": 18,
+        "speed": 6
+    },
+    "starterEligible": false,
+    "learnset": ["ember-nudge", "pebble-toss", "tackle"]
+}

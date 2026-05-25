@@ -10,14 +10,12 @@
         "dependencies": {
           "JoyMon.Content": "1.0.0",
           "JoyMon.Core": "1.0.0",
-          "MonoGame.Content.Builder.Task": "3.8.2.1105",
           "MonoGame.Framework.DesktopGL": "3.8.2.1105"
         },
         "runtime": {
           "JoyMon.Game.dll": {}
         }
       },
-      "MonoGame.Content.Builder.Task/3.8.2.1105": {},
       "MonoGame.Framework.DesktopGL/3.8.2.1105": {
         "dependencies": {
           "MonoGame.Library.SDL": "2.26.5.5",
@@ -112,13 +110,6 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
-    },
-    "MonoGame.Content.Builder.Task/3.8.2.1105": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-wNlkLaITOqMs9MmCYLp3Qc7QfFng3FhIq/b+njdYV3cTVpLYgs/i56FYtJjm8jLoUA/2sJ36Qo/uqWpgW+jBuQ==",
-      "path": "monogame.content.builder.task/3.8.2.1105",
-      "hashPath": "monogame.content.builder.task.3.8.2.1105.nupkg.sha512"
     },
     "MonoGame.Framework.DesktopGL/3.8.2.1105": {
       "type": "package",

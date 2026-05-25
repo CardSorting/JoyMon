@@ -114,8 +114,10 @@ public class ContentLoader
                 validation.AddError($"Move '{move.Id}' missing 'name'");
             if (string.IsNullOrWhiteSpace(move.Type))
                 validation.AddError($"Move '{move.Id}' missing 'type'");
-            if (move.Power <= 0)
-                validation.AddError($"Move '{move.Id}' has invalid 'power' ({move.Power}); must be > 0");
+            if (move.Power < 0)
+                validation.AddError($"Move '{move.Id}' has invalid 'power' ({move.Power}); must be >= 0");
+            if (move.Power == 0 && move.Effect != MoveEffects.Guard)
+                validation.AddError($"Move '{move.Id}' has invalid 'power' (0); only guard moves may have 0 power");
             if (move.Accuracy < 0 || move.Accuracy > 100)
                 validation.AddError($"Move '{move.Id}' has invalid 'accuracy' ({move.Accuracy}); must be 0–100");
             if (move.MaxUses <= 0)
@@ -214,7 +216,15 @@ public class ContentLoader
 
             var type = ParseType(raw.Type, $"move '{raw.Id}'", validation);
 
-            var def = new MoveDefinition(raw.Id, raw.Name, type, raw.Power, raw.Accuracy, raw.MaxUses);
+            var def = new MoveDefinition(
+                raw.Id,
+                raw.Name,
+                type,
+                raw.Power,
+                raw.Accuracy,
+                raw.MaxUses,
+                raw.Effect,
+                raw.EffectChance);
             dict[raw.Id] = def;
         }
 

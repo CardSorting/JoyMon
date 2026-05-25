@@ -68,6 +68,12 @@
       "fromTile": { "x": 10, "y": 0 },
       "toMapId": "trial-grove",
       "toTile": { "x": 10, "y": 12 }
+    },
+    {
+      "fromMapId": "route-1",
+      "fromTile": { "x": 19, "y": 7 },
+      "toMapId": "mill-road",
+      "toTile": { "x": 0, "y": 7 }
     }
   ]
 }

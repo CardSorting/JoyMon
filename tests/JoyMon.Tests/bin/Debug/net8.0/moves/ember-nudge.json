@@ -1,0 +1,10 @@
+{
+  "id": "ember-nudge",
+  "name": "Ember Nudge",
+  "type": "Ember",
+  "power": 35,
+  "accuracy": 100,
+  "maxUses": 25,
+  "effect": "burn",
+  "effectChance": 30
+}

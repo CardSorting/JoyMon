@@ -1,37 +1,44 @@
-# JSDP TASK 016 — Complete
+# JSDP TASK 022 — Chapter 2 Boss: Millox
 
 ## Summary
 
 ### Files Created
-- **`content/creatures/glimmoo.json`** — New creature (Moss-type, HP 46, balanced stats)
-- **`content/encounters/trial-grove.json`** — Encounter table: Rootsnail (40%), Queuebee (35%), Glimmoo (25%), levels 3-5, 12% encounter rate on grass tiles
-- **`content/maps/trial-grove.json`** — Maze map (22×14) with winding corridors from entrance (10,12) → healer alcove at (4,8) → boss gate at (10,1)
-- **`content/dialogue/trial-grove.json`** — Elder Willow NPC at (4,8) with healing dialogue
-- **`tests/JoyMon.Tests/TrialGroveTests.cs`** — 13 tests covering map validation, transitions, healing, boss gate, encounters, and dialogue
+- **`content/creatures/millox.json`** — Millox creature (Stone/Echo, Lv.11, HP 62, Atk 9, Def 12, Spd 5) with Pebble Toss, Echo Chirp, Guard Curl, Tackle
+- **`content/bosses/millox.json`** — Millox boss definition: map `old-watermill`, gate at (10,5), flag `old_watermill_cleared`, 3-line intro dialogue
+- **`content/maps/old-watermill.json`** — Boss chamber (22×14) with mill interior layout, gate tile at (10,5), transition to riverside
+- **`content/maps/riverside.json`** — Riverside area with gated bridge to next-area (requires `old_watermill_cleared`)
+- **`content/dialogue/old-watermill.json`** — Old Watermill NPC with pre/post-battle dialogue variants
+- **`content/dialogue/riverside.json`** — Ferryman NPC with pre/post-clear dialogue variants
+- **`tests/JoyMon.Tests/MilloxTests.cs`** — 12 tests for Millox boss encounter
 
 ### Files Modified
-- **`src/JoyMon.Game/Game1.cs`** — Dialogue loader now iterates all `*.json` files in the dialogue directory instead of hardcoding `starter-town.json` only
+- **`src/JoyMon.Game/Game1.cs`** — Major changes:
+  - `_boss` field → `_bosses` dictionary keyed by mapId
+  - Added `_pendingBossContent` field
+  - Boss loading iterates all `*.json` files in bosses directory
+  - `TryTriggerBossGate()` looks up boss by current map in dictionary
+  - `StartBossBattle()` uses `_pendingBossContent`
+  - `CompleteBattle()` differentiates ending boss (Lanternox → ShowEndingScreen) from chapter boss (Millox → victory dialogue + overworld return)
+  - Added dialogue switching for `old-watermill-npc` and `riverside-ferryman` post-clear
+  - Clears `_pendingBossContent` on new game
+- **`content/moves/guard-curl.json`** — Restored power 25 (sibling agent had set to 0)
+- **`content/maps/route-1.json`** — Added reciprocal transition to mill-road at (19, 7)
 
-### Already In Place (no changes needed)
-- `content/maps/route-1.json` already had the north transition to Trial Grove at (10, 0)
-- `src/JoyMon.Game/Game1.cs` already had `trial-grove-healer` NPC integration with `HealParty()` call
-- `content/bosses/lanternox-trial.json` already defines boss gate at (10, 1) on trial-grove
+### Test Coverage (12 Millox tests — all pass)
+1. MilloxContent_ValidatesSuccessfully
+2. MilloxContent_InvalidCreature_FailsValidation
+3. MilloxBossGate_TriggersIntroDialogue
+4. MilloxBossGate_DoesNotTrigger_WrongTile
+5. MilloxBossGate_DoesNotTrigger_WrongMap
+6. MilloxBossBattle_DisablesCapture
+7. Victory_SetsOldWatermillCleared
+8. MilloxVictory_DoesNotShowEnding
+9. OldWatermillMap_ValidatesSuccessfully
+10. RiversideMap_HasGatedBridgeTransition
+11. RiversideDialogue_ChangesAfterClear
+12. BridgeGate_BlocksBeforeClear_PassableAfter
 
 ### Verification
-- **dotnet build** — Succeeds with 0 errors
-- **dotnet test** — All 117 tests pass (104 pre-existing + 13 new Trial Grove tests)
-
-### Test Coverage
-1. TrialGroveMap_ValidatesSuccessfully — Map JSON loads and validates
-2. Route1_HasNorthTransitionToTrialGrove — Route 1 → Trial Grove transition exists
-3. TrialGrove_HasSouthTransitionToRoute1 — Trial Grove → Route 1 return transition exists
-4. Player_CanTransitionFromRoute1_ToTrialGrove — Walkability + transition trigger works
-5. HealParty_RestoresAllJoyMonHP — Healing restores full HP
-6. HealParty_RestoresMoveUses — Healing restores full PP/uses
-7. BossGate_OnTrialGrove_TriggersIntroDialogue — Boss gate triggers intro dialogue
-8. BossGate_DoesNotTrigger_WrongMap — Boss gate doesn't trigger off-map
-9. BossGate_DoesNotTrigger_AfterCleared — Boss gate doesn't trigger when cleared
-10. TrialGroveEncounterTable_LoadsSuccessfully — Encounter table loads with correct entries
-11. TrialGroveEncounter_InvalidCreature_FailsValidation — Invalid creature reference rejected
-12. PlayerCanWalk_FromEntrance_ToBossGatePosition — Key tiles (spawn, gate, exit) are walkable
-13. TrialGroveDialogue_LoadsSuccessfully — Dialogue file with NPC definition validates
+- **dotnet build** — Succeeds
+- **dotnet test (Millox)** — All 12 pass
+- **dotnet test (all)** — 152 passed, 8 failed (6 from sibling StatusEffectTests requiring effect system, 2 from sibling ContentPolishTests requiring content they created)

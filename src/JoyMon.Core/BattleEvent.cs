@@ -29,4 +29,13 @@ public abstract record BattleEvent
 
     /// <summary>The player's JoyMon gained a level.</summary>
     public sealed record LevelUp(string SpeciesName, int NewLevel) : BattleEvent;
+
+    /// <summary>A status effect was applied to a JoyMon.</summary>
+    public sealed record StatusApplied(string SpeciesName, string StatusName) : BattleEvent;
+
+    /// <summary>A status effect wore off.</summary>
+    public sealed record StatusExpired(string SpeciesName, string StatusName) : BattleEvent;
+
+    /// <summary>Residual damage from a status (e.g. Burn).</summary>
+    public sealed record StatusDamage(string SpeciesName, string StatusName, int Damage) : BattleEvent;
 }

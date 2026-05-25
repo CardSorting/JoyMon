@@ -24,10 +24,8 @@ public class BattleSystem
         var player = state.PlayerJoyMon;
         var opponent = state.OpponentJoyMon;
 
-        // Determine turn order — higher Speed goes first
         bool playerFirst = DetermineTurnOrder(player, opponent);
 
-        // Resolve actions in Speed order
         if (playerFirst)
         {
             ResolveAction(state, playerCommand, player, opponent);
@@ -41,21 +39,18 @@ public class BattleSystem
                 ResolveAction(state, playerCommand, player, opponent);
         }
 
-        // Post-action win/loss check
+        ExpireUnusedGuards(state);
+
         if (!state.IsOver)
             CheckBattleEnd(state);
     }
 
-    // ── Turn order ──────────────────────────────────────────────
-
     private static bool DetermineTurnOrder(JoyMonInstance a, JoyMonInstance b)
     {
-        if (a.Speed > b.Speed) return true;  // a (player) first
-        if (b.Speed > a.Speed) return false; // b (opponent) first
-        return true; // tie → player goes first
+        if (a.Speed > b.Speed) return true;
+        if (b.Speed > a.Speed) return false;
+        return true;
     }
-
-    // ── Action resolution ───────────────────────────────────────
 
     private void ResolveAction(BattleState state, BattleCommand command, JoyMonInstance actor, JoyMonInstance target)
     {
@@ -70,23 +65,22 @@ public class BattleSystem
                 state.IsOver = true;
                 state.PlayerWon = false;
                 state.Events.Add(new BattleEvent.BattleLost());
-                break;
+                return;
         }
-    }
 
-    // ── Fight resolution ────────────────────────────────────────
+        if (!state.IsOver && !actor.IsFainted)
+            ProcessBurnAfterActing(state, actor);
+    }
 
     private void ResolveFight(BattleState state, BattleCommand.Fight fight, JoyMonInstance actor, JoyMonInstance target)
     {
         var moveIndex = fight.MoveIndex;
         if (moveIndex < 0 || moveIndex >= actor.Species.Moves.Count)
         {
-            // Invalid move index — treat as Struggle
             ActivateStruggle(state, actor, target);
             return;
         }
 
-        // No PP? Use Struggle
         if (actor.RemainingUses[moveIndex] <= 0)
         {
             ActivateStruggle(state, actor, target);
@@ -94,14 +88,10 @@ public class BattleSystem
         }
 
         var move = actor.Species.Moves[moveIndex];
-
-        // Deduct PP
         actor.RemainingUses[moveIndex]--;
 
-        // Log move usage
         state.Events.Add(new BattleEvent.MoveUsed(actor.Species.Name, move.Name));
 
-        // Accuracy check: RNG * 100 < move.Accuracy → hit
         double roll = _rng.NextDouble() * 100.0;
         if (roll >= move.Accuracy)
         {
@@ -109,27 +99,31 @@ public class BattleSystem
             return;
         }
 
-        // Calculate and apply damage
+        if (move.AppliesGuard)
+        {
+            actor.IsGuarding = true;
+            state.Events.Add(new BattleEvent.StatusApplied(actor.Species.Name, BattleStatus.Guard));
+            return;
+        }
+
         int damage = CalculateDamage(actor, target, move);
+        damage = ApplyGuardReduction(target, damage);
         target.CurrentHp -= damage;
         state.Events.Add(new BattleEvent.DamageDealt(actor.Species.Name, target.Species.Name, damage));
 
-        // Check faint
+        if (!target.IsFainted)
+            TryApplyBurn(state, move, target);
+
         if (target.IsFainted)
-        {
             state.Events.Add(new BattleEvent.JoyMonFainted(target.Species.Name));
-        }
     }
 
-    /// <summary>
-    /// Fallback when no valid move has PP remaining.
-    /// </summary>
     private void ActivateStruggle(BattleState state, JoyMonInstance actor, JoyMonInstance target)
     {
         state.Events.Add(new BattleEvent.MoveUsed(actor.Species.Name, "Struggle"));
 
-        // Struggle always hits, low power, minor recoil
         int damage = Math.Max(1, ((actor.Attack * 10) / Math.Max(1, target.Defense)) / 4);
+        damage = ApplyGuardReduction(target, damage);
         target.CurrentHp -= damage;
         state.Events.Add(new BattleEvent.DamageDealt(actor.Species.Name, target.Species.Name, damage));
 
@@ -137,32 +131,79 @@ public class BattleSystem
             state.Events.Add(new BattleEvent.JoyMonFainted(target.Species.Name));
     }
 
-    // ── Damage formula ──────────────────────────────────────────
+    private void TryApplyBurn(BattleState state, MoveDefinition move, JoyMonInstance target)
+    {
+        if (!move.CanInflictBurn) return;
 
-    /// <summary>
-    /// damage = max(1, ((attacker.Attack * move.Power) / max(1, defender.Defense)) / 4)
-    /// </summary>
+        var chance = move.EffectChance > 0
+            ? move.EffectChance
+            : BattleStatus.DefaultBurnChancePercent;
+
+        if (_rng.NextDouble() * 100.0 >= chance)
+            return;
+
+        target.BurnTurnsRemaining = BattleStatus.BurnDurationTurns;
+        state.Events.Add(new BattleEvent.StatusApplied(target.Species.Name, BattleStatus.Burn));
+    }
+
+    private static int ApplyGuardReduction(JoyMonInstance defender, int damage)
+    {
+        if (!defender.IsGuarding) return damage;
+
+        defender.IsGuarding = false;
+        return Math.Max(1, damage / 2);
+    }
+
+    private void ProcessBurnAfterActing(BattleState state, JoyMonInstance actor)
+    {
+        if (actor.BurnTurnsRemaining <= 0) return;
+
+        actor.CurrentHp -= BattleStatus.BurnDamagePerTick;
+        state.Events.Add(new BattleEvent.StatusDamage(
+            actor.Species.Name,
+            BattleStatus.Burn,
+            BattleStatus.BurnDamagePerTick));
+
+        actor.BurnTurnsRemaining--;
+        if (actor.BurnTurnsRemaining == 0)
+            state.Events.Add(new BattleEvent.StatusExpired(actor.Species.Name, BattleStatus.Burn));
+
+        if (actor.IsFainted)
+            state.Events.Add(new BattleEvent.JoyMonFainted(actor.Species.Name));
+    }
+
+    private static void ExpireUnusedGuards(BattleState state)
+    {
+        ExpireGuardIfActive(state, state.PlayerJoyMon);
+        ExpireGuardIfActive(state, state.OpponentJoyMon);
+    }
+
+    private static void ExpireGuardIfActive(BattleState state, JoyMonInstance joyMon)
+    {
+        if (!joyMon.IsGuarding) return;
+
+        joyMon.IsGuarding = false;
+        state.Events.Add(new BattleEvent.StatusExpired(joyMon.Species.Name, BattleStatus.Guard));
+    }
+
     public static int CalculateDamage(JoyMonInstance attacker, JoyMonInstance defender, MoveDefinition move)
     {
+        if (move.AppliesGuard || move.Power <= 0)
+            return 0;
+
         return Math.Max(1, ((attacker.Attack * move.Power) / Math.Max(1, defender.Defense)) / 4);
     }
 
-    // ── Opponent AI ─────────────────────────────────────────────
-
     private static BattleCommand GetOpponentCommand(JoyMonInstance joymon)
     {
-        // Pick first non-depleted move
         for (int i = 0; i < joymon.Species.Moves.Count; i++)
         {
             if (joymon.RemainingUses[i] > 0)
                 return new BattleCommand.Fight(i);
         }
 
-        // All moves depleted - use Struggle via index 0 (will trigger ActivateStruggle)
         return new BattleCommand.Fight(0);
     }
-
-    // ── End-of-turn checks ──────────────────────────────────────
 
     private void CheckBattleEnd(BattleState state)
     {
@@ -175,15 +216,12 @@ public class BattleSystem
             state.PlayerWon = true;
             state.Events.Add(new BattleEvent.BattleWon());
 
-            // Award XP based on opponent's strength
             int xpAmount = opponent.Species.BaseMaxHp + opponent.Level;
             int levelsGained = player.GrantXp(xpAmount);
             state.Events.Add(new BattleEvent.XpGained(xpAmount, player.Xp));
 
             if (levelsGained > 0)
-            {
                 state.Events.Add(new BattleEvent.LevelUp(player.Species.Name, player.Level));
-            }
         }
         else if (player.IsFainted)
         {

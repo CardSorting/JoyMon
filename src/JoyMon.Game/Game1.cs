@@ -1505,6 +1505,13 @@ public sealed class Game1 : Microsoft.Xna.Framework.Game
             var hpSize = _font.MeasureString(hpText);
             _spriteBatch.DrawString(_font, hpText, new Vector2(rect.Right - hpSize.X - 6, rect.Y + 31), Color.Black);
         }
+
+        var statusLabel = joymon.BattleStatusLabel;
+        if (!string.IsNullOrEmpty(statusLabel))
+        {
+            var statusColor = statusLabel == "BRN" ? new Color(200, 60, 40) : new Color(50, 90, 160);
+            _spriteBatch.DrawString(_font, statusLabel, new Vector2(rect.X + 8, rect.Y + 31), statusColor);
+        }
     }
 
     private void DrawCommandMenu(BattleScene scene)

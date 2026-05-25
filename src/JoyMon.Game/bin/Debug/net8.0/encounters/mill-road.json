@@ -1,0 +1,35 @@
+{
+    "id": "mill-road-encounters",
+    "mapId": "mill-road",
+    "zoneId": "grass",
+    "tileIds": [
+        1
+    ],
+    "encounterRate": 0.12,
+    "entries": [
+        {
+            "creatureId": "glimmoo",
+            "minLevel": 5,
+            "maxLevel": 6,
+            "weight": 30
+        },
+        {
+            "creatureId": "queuebee",
+            "minLevel": 5,
+            "maxLevel": 6,
+            "weight": 25
+        },
+        {
+            "creatureId": "pebblit",
+            "minLevel": 5,
+            "maxLevel": 6,
+            "weight": 25
+        },
+        {
+            "creatureId": "drizzleaf",
+            "minLevel": 5,
+            "maxLevel": 6,
+            "weight": 20
+        }
+    ]
+}

@@ -2,7 +2,8 @@
   "id": "guard-curl",
   "name": "Guard Curl",
   "type": "Tide",
-  "power": 25,
+  "power": 0,
   "accuracy": 100,
-  "maxUses": 20
+  "maxUses": 20,
+  "effect": "guard"
 }

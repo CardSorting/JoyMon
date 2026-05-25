@@ -24,4 +24,10 @@ public class MoveContent
 
     [JsonPropertyName("maxUses")]
     public int MaxUses { get; init; }
+
+    [JsonPropertyName("effect")]
+    public string? Effect { get; init; }
+
+    [JsonPropertyName("effectChance")]
+    public int EffectChance { get; init; }
 }

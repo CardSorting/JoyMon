@@ -1,0 +1,69 @@
+{
+    "id": "emberpass-outskirts",
+    "name": "Emberpass Outskirts",
+    "groups": [
+        {
+            "name": "outskirts_ash",
+            "encounters": [
+                {
+                    "targetCandidates": [
+                        {
+                            "speciesId": "ashkit",
+                            "levelMin": 11,
+                            "levelMax": 13
+                        }
+                    ],
+                    "repeats": 3
+                }
+            ],
+            "trigger": "walk_overworld"
+        },
+        {
+            "name": "outskirts_rocky",
+            "encounters": [
+                {
+                    "targetCandidates": [
+                        {
+                            "speciesId": "coalboar",
+                            "levelMin": 12,
+                            "levelMax": 14
+                        }
+                    ],
+                    "repeats": 3
+                }
+            ],
+            "trigger": "walk_overworld"
+        },
+        {
+            "name": "outskirts_common",
+            "encounters": [
+                {
+                    "targetCandidates": [
+                        {
+                            "speciesId": "cindermite",
+                            "levelMin": 10,
+                            "levelMax": 12
+                        },
+                        {
+                            "speciesId": "pebblit",
+                            "levelMin": 10,
+                            "levelMax": 12
+                        },
+                        {
+                            "speciesId": "ashkit",
+                            "levelMin": 11,
+                            "levelMax": 13
+                        },
+                        {
+                            "speciesId": "coalboar",
+                            "levelMin": 12,
+                            "levelMax": 14
+                        }
+                    ],
+                    "repeats": 3
+                }
+            ],
+            "trigger": "walk_overworld"
+        }
+    ]
+}
